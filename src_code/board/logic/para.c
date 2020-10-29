@@ -58,12 +58,12 @@ static void Load_System_Para(void)
     DEBUG("调试标志:%d\n", User_Memory_Para.debug_flag);
 
     /*检测记录流水号*/
-    User_Memory_Para.detetct_log_serial_number = iniparser_getint(Config_ini, "Setting:Detect_Log_Serial_Number", -1);
+    User_Memory_Para.detect_log_serial_number = iniparser_getint(Config_ini, "Setting:Detect_Log_Serial_Number", -1);
 
-    if(-1 == User_Memory_Para.detetct_log_serial_number)
-        User_Memory_Para.detetct_log_serial_number = 0 ;
+    if(-1 == User_Memory_Para.detect_log_serial_number)
+        User_Memory_Para.detect_log_serial_number = 0 ;
 
-    DEBUG("检测流水号:%d\n", User_Memory_Para.detetct_log_serial_number);
+    DEBUG("检测流水号:%d\n", User_Memory_Para.detect_log_serial_number);
     User_Memory_Para.alarm_threshold[0] = \
                                           iniparser_getint(Config_ini, "Setting:SENSIVITY_LOW", -1);
     User_Memory_Para.alarm_threshold[1] = \
@@ -168,7 +168,7 @@ void User_Detect_Log_Save_Process(void)
 {
     char buf[5] = {0};
     memset(buf, 0, 5);
-    sprintf(buf, "%d", User_Memory_Para.detetct_log_serial_number);
+    sprintf(buf, "%d", User_Memory_Para.detect_log_serial_number);
     iniparser_set(Config_ini, "Setting:Detect_Log_Serial_Number", buf);
     DEBUG("设置检测流水号:%d\r\n", iniparser_getint(Config_ini, "Setting:Detect_Log_Serial_Number", -1));
     User_Para_Save_Process();

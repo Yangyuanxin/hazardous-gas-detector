@@ -150,7 +150,7 @@ void log_page_data_init(void)
 {
     /*读取当前检测的流水号*/
     csv_file_record.Current_Serial_Number = \
-                                            User_Memory_Para.detetct_log_serial_number ;
+                                            User_Memory_Para.detect_log_serial_number ;
 
     if(0 == csv_file_record.Current_Serial_Number % DETECT_DATA_INDEX)
     {
@@ -246,9 +246,9 @@ void log_page_data_prev_next_handler(uint8_t KeyValue)
             break ;
 
         case RIGHT:
-            (csv_file_record.Current_Serial_Number < User_Memory_Para.detetct_log_serial_number) ?	\
+            (csv_file_record.Current_Serial_Number < User_Memory_Para.detect_log_serial_number) ?	\
             (csv_file_record.Current_Serial_Number++) :	\
-            (csv_file_record.Current_Serial_Number = User_Memory_Para.detetct_log_serial_number);
+            (csv_file_record.Current_Serial_Number = User_Memory_Para.detect_log_serial_number);
 
             /*计算当前数据项位于该文件的索引*/
             if(0 == csv_file_record.Current_Serial_Number % 100)

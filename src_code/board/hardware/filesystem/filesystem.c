@@ -86,7 +86,7 @@ int save_record_to_flash(void)
     char filename[FILE_NAME_LEN] = {0};
     char Detect_Data[100] = {0} ;
     /*计算当前流水号一个可以产生多少个文件，一个文件超出100个记录项则自动创建新的文件*/
-    int data_serial_num_file_count =  User_Memory_Para.detetct_log_serial_number / DETECT_DATA_INDEX ;
+    int data_serial_num_file_count =  User_Memory_Para.detect_log_serial_number / DETECT_DATA_INDEX ;
     sprintf(filename, "0:BearPi_Log%d.csv", data_serial_num_file_count);
     retSD = f_open(&SDFile, filename, FA_OPEN_ALWAYS | FA_WRITE);
 
@@ -99,11 +99,11 @@ int save_record_to_flash(void)
     /*每一次都偏移到文件的末尾*/
     f_lseek(&SDFile, f_size(&SDFile));
     /*流水号自增*/
-    ++User_Memory_Para.detetct_log_serial_number;
+    ++User_Memory_Para.detect_log_serial_number;
     /*记录流水号保存处理*/
     User_Detect_Log_Save_Process();
     sprintf(Detect_Data, "%d,%2d/%02d/%02d %02d:%02d,%d\r\n",		\
-            User_Memory_Para.detetct_log_serial_number, DateTime_Handler_Info.year, 	\
+            User_Memory_Para.detect_log_serial_number, DateTime_Handler_Info.year, 	\
 			DateTime_Handler_Info.month,DateTime_Handler_Info.day, 						\
 			DateTime_Handler_Info.hour, DateTime_Handler_Info.minute,					\
 			Sensor_Flow_Cursor.Is_safety_or_danger);
