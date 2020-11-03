@@ -53,271 +53,104 @@
 
 例如，给显示一个ASCII码字符串的地方加上调度锁：
 
-```go
+```c
 /**
-
-
-
- * @brief  显示一个ASCII码字符串
-
-
-
- * @param   x,y  显示起始坐标
-
-
-
- * @param   str  需要显示的字符串
-
-
-
- * @param   size 字体大小(支持16/24/32号字体)
-
-
-
- * @return  none
-
-
-
- * @note  1. 需要font.h字库文件的支持
-
-
-
- *      2. 超过指定width不显示超过的字符
-
-
-
- */
-
-
-
-void LCD_ShowCharStr(uint16_t x, uint16_t y, uint8_t max_width, char* str, uint16_t back_color, uint16_t font_color, uint8_t font_size)
-
-
-
+ * @brief  显示一个ASCII码字符串
+ * @param   x,y  显示起始坐标
+ * @param   str  需要显示的字符串
+ * @param   size 字体大小(支持16/24/32号字体)
+ * @return  none
+ * @note  1. 需要font.h字库文件的支持
+ *      2. 超过指定width不显示超过的字符
+ */
+void LCD_ShowCharStr(uint16_t x, uint16_t y, uint8_t max_width, char* str, uint16_t back_color, uint16_t font_color, uint8_t font_size)
 {
-
-
-
-  //锁定系统调度
-
-
-
- tos_knl_sched_lock();
-
-
-
- max_width += x;
-
-
-
- 
-
-
-
- while((*str <= '~') && (*str >= ' ')) //判断是否非法字符
-
-
-
- {
-
-
-
-   if(x >= max_width)
-
-
-
-   {
-
-
-
-     //x方向越界，结束
-
-
-
-     break;
-
-
-
-   }
-
-
-
-   
-
-
-
-   LCD_ShowChar(x,y,*str,back_color, font_color,font_size);
-
-
-
-   x += font_size / 2;
-
-
-
-   str++;
-
-
-
- }
-
-
-
-  //解锁系统调度
-
-
-
- tos_knl_sched_unlock();
-
-
-
+  //锁定系统调度
+ tos_knl_sched_lock();
+ max_width += x;
+ 
+ while((*str <= '~') && (*str >= ' ')) //判断是否非法字符
+ {
+   if(x >= max_width)
+   {
+     //x方向越界，结束
+     break;
+   }
+   
+   LCD_ShowChar(x,y,*str,back_color, font_color,font_size);
+   x += font_size / 2;
+   str++;
+ }
+  //解锁系统调度
+ tos_knl_sched_unlock();
 }
 ```
 
 加调度锁的方法，即是在函数入口处加上`tos_knl_sched_lock`，在函数出口的地方`tos_knl_sched_unlock`解除调度锁，这样就完成了一个显示过程的保护，当然，在对SD卡文件系统读写参数的过程中，我们也需要做好保护，比如：
 
-```go
+```c
 /*用户参数保存处理*/
-
-
-
-void User_Para_Save_Process(void)
-
-
-
+void User_Para_Save_Process(void)
 {
-
-
-
-    //锁定系统调度
-
-
-
-    tos_knl_sched_lock();
-
-
-
-    /*write config.ini parse*/
-
-
-
-    retUSER_SYS_CONFIG = f_open(&USER_SYS_CONFIG_File, SETTING_PARA, FA_OPEN_EXISTING | FA_WRITE);
-
-
-
+    //锁定系统调度
+    tos_knl_sched_lock();
+    /*write config.ini parse*/
+    retUSER_SYS_CONFIG = f_open(&USER_SYS_CONFIG_File, SETTING_PARA, FA_OPEN_EXISTING | FA_WRITE);
  
-
-
-
-    if(FR_OK != retUSER_SYS_CONFIG)
-
-
-
-    {
-
-
-
-        printf("iniparser: cannot open %s\n", SETTING_PARA);
-
-
-
-        return ;
-
-
-
-    }
-
-
-
+    if(FR_OK != retUSER_SYS_CONFIG)
+    {
+        printf("iniparser: cannot open %s\n", SETTING_PARA);
+        return ;
+    }
  
-
-
-
-    printf("参数设置保存成功\n");
-
-
-
-    iniparser_dump_ini(Config_ini, &USER_SYS_CONFIG_File);
-
-
-
-    f_close(&USER_SYS_CONFIG_File);
-
-
-
-    iniparser_freedict(Config_ini);
-
-
-
-    Load_Config_ini_File();
-
-
-
-    //解锁系统调度
-
-
-
-    tos_knl_sched_unlock();
-
-
-
+    printf("参数设置保存成功\n");
+    iniparser_dump_ini(Config_ini, &USER_SYS_CONFIG_File);
+    f_close(&USER_SYS_CONFIG_File);
+    iniparser_freedict(Config_ini);
+    Load_Config_ini_File();
+    //解锁系统调度
+    tos_knl_sched_unlock();
+}
+/*用户参数保存处理*/
+void User_Para_Save_Process(void)
+{
+    //锁定系统调度
+    tos_knl_sched_lock();
+    /*write config.ini parse*/
+    retUSER_SYS_CONFIG = f_open(&USER_SYS_CONFIG_File, SETTING_PARA, FA_OPEN_EXISTING | FA_WRITE);
+ 
+    if(FR_OK != retUSER_SYS_CONFIG)
+    {
+        printf("iniparser: cannot open %s\n", SETTING_PARA);
+        return ;
+    }
+ 
+    printf("参数设置保存成功\n");
+    iniparser_dump_ini(Config_ini, &USER_SYS_CONFIG_File);
+    f_close(&USER_SYS_CONFIG_File);
+    iniparser_freedict(Config_ini);
+    Load_Config_ini_File();
+    //解锁系统调度
+    tos_knl_sched_unlock();
 }
 ```
 
 如果没有做好保护，当你在写入参数到文件系统的时候，此时任务发送了切换，那么很容易就会导致写入错乱进而跳转到：
 
-```go
+```c
 /**
-
-
-
-  * @brief This function handles Hard fault interrupt.
-
-
-
-  */
-
-
-
-void HardFault_Handler(void)
-
-
-
+  * @brief This function handles Hard fault interrupt.
+  */
+void HardFault_Handler(void)
 {
-
-
-
-    /* USER CODE BEGIN HardFault_IRQn 0 */
-
-
-
+    /* USER CODE BEGIN HardFault_IRQn 0 */
  
-
-
-
-    /* USER CODE END HardFault_IRQn 0 */
-
-
-
-    while (1)
-
-
-
-    {
-
-
-
-        /* USER CODE BEGIN W1_HardFault_IRQn 0 */
-
-
-
-        /* USER CODE END W1_HardFault_IRQn 0 */
-
-
-
-    }
-
-
-
+    /* USER CODE END HardFault_IRQn 0 */
+    while (1)
+    {
+        /* USER CODE BEGIN W1_HardFault_IRQn 0 */
+        /* USER CODE END W1_HardFault_IRQn 0 */
+    }
 }
 ```
 
@@ -329,100 +162,31 @@ void HardFault_Handler(void)
 
 记录存储相关数据结构如下：
 
-```go
+```c
 /*文件名大小限制*/
-
-
-
-#define FILE_NAME_LEN 20
-
-
-
+#define FILE_NAME_LEN 20
 /*检测数据大小限制*/
-
-
-
-#define DETECT_DATA_LEN 50
-
-
-
+#define DETECT_DATA_LEN 50
 /*一个文件存储检测记录的条数*/
-
-
-
-#define DETECT_DATA_INDEX 100
-
-
-
+#define DETECT_DATA_INDEX 100
  
-
-
-
-typedef struct 
-
-
-
+typedef struct 
 {
-
-
-
-    int serial_number ;      //序号
-
-
-
-    int year ;               //2019-
-
-
-
-    uint8_t month ;          //0-12
-
-
-
-    uint8_t day ;            //0-31
-
-
-
-    uint8_t hour ;           //0-24
-
-
-
-    uint8_t minute ;         //0-59
-
-
-
-    uint8_t detect_result ;  //检测结果
-
-
-
-    /*当前位于文件的哪一行*/
-
-
-
-    int Current_Line;
-
-
-
-    /*当前文件编号查询索引*/
-
-
-
-    int file_number_index ;
-
-
-
-    /*当前流水号，每次记录初始化的时候会赋值一次*/
-
-
-
-    int Current_Serial_Number ;
-
-
-
-} Record_Data;
-
-
-
-extern Record_Data csv_file_record ;
+    int serial_number ;      //序号
+    int year ;               //2019-
+    uint8_t month ;          //0-12
+    uint8_t day ;            //0-31
+    uint8_t hour ;           //0-24
+    uint8_t minute ;         //0-59
+    uint8_t detect_result ;  //检测结果
+    /*当前位于文件的哪一行*/
+    int Current_Line;
+    /*当前文件编号查询索引*/
+    int file_number_index ;
+    /*当前流水号，每次记录初始化的时候会赋值一次*/
+    int Current_Serial_Number ;
+} Record_Data;
+extern Record_Data csv_file_record ;
 ```
 
 记录逻辑采用分文件csv存储，将csv文件序号存放在ini文件中，然后通过文件序号快速定位到具体是哪个csv文件的哪一行，该策略支持10000条数据实时查询并能保证流程不卡顿，已在相关产品中量产应用。
