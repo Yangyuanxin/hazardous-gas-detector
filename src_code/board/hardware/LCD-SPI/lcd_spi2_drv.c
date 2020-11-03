@@ -23,15 +23,108 @@
 
 #include "lcd_spi2_drv.h"
 #include "spi2.h"
-#if USE_ASCII_FONT_LIB
 #include "font.h"
-#endif /* USE_ASCII_FONT_LIB */
-#include "main.h"
+
 
 #define LCD_TOTAL_BUF_SIZE	(240*240*2)
 #define LCD_Buf_Size 1152
 
 static uint8_t lcd_buf[LCD_Buf_Size];
+
+static struct st7789_function st7789_cfg_script[] =
+{
+    {ST7789_START, ST7789_START},
+		/* Sleep Out */
+    {ST7789_CMD, 0x11},
+    {ST7789_DELAY, 120},
+		/* Memory Data Access Control */
+    {ST7789_CMD, 0x36},
+    {ST7789_DATA, 0x00},
+		/* RGB 5-6-5-bit  */
+    {ST7789_CMD, 0x3a},
+    {ST7789_DATA, 0x65},
+		/* Porch Setting */
+    {ST7789_CMD, 0xb2},
+    {ST7789_DATA, 0x0c},
+    {ST7789_DATA, 0x0c},
+    {ST7789_DATA, 0x00},
+    {ST7789_DATA, 0x33},
+    {ST7789_DATA, 0x33},
+		/*  Gate Control */
+    {ST7789_CMD, 0xb7},
+    {ST7789_DATA, 0x72},
+		/* VCOM Setting */
+    {ST7789_CMD, 0xbb},
+    {ST7789_DATA, 0x3d},//Vcom=1.625V
+		/* LCM Control */
+		{ST7789_CMD, 0xc0},
+    {ST7789_DATA, 0x2c},
+		/* VDV and VRH Command Enable */
+    {ST7789_CMD, 0xc2},
+    {ST7789_DATA, 0x01},
+		/* VRH Set */
+    {ST7789_CMD, 0xc3},
+    {ST7789_DATA, 0x19},
+		/* VDV Set */
+    {ST7789_CMD, 0xc4},
+    {ST7789_DATA, 0x20},
+		/* Frame Rate Control in Normal Mode */
+    {ST7789_CMD, 0xc6},
+    {ST7789_DATA, 0x01},
+		/* Power Control 1 */
+    {ST7789_CMD, 0xd0},
+    {ST7789_DATA, 0xa4},
+    {ST7789_DATA, 0xa1},
+		/* Positive Voltage Gamma Control */
+    {ST7789_CMD, 0xe0},
+    {ST7789_DATA, 0xD0},
+    {ST7789_DATA, 0x04},
+    {ST7789_DATA, 0x0D},
+    {ST7789_DATA, 0x11},
+    {ST7789_DATA, 0x13},
+    {ST7789_DATA, 0x2B},
+    {ST7789_DATA, 0x3F},
+    {ST7789_DATA, 0x54},
+    {ST7789_DATA, 0x4C},
+    {ST7789_DATA, 0x18},
+    {ST7789_DATA, 0x0D},
+    {ST7789_DATA, 0x0B},
+    {ST7789_DATA, 0x1F},
+    {ST7789_DATA, 0x23},
+		/* Negative Voltage Gamma Control */
+    {ST7789_CMD, 0xe1},
+    {ST7789_DATA, 0xD0},
+    {ST7789_DATA, 0x04},
+    {ST7789_DATA, 0x0C},
+    {ST7789_DATA, 0x11},
+    {ST7789_DATA, 0x13},
+    {ST7789_DATA, 0x2C},
+    {ST7789_DATA, 0x3F},
+    {ST7789_DATA, 0x44},
+    {ST7789_DATA, 0x51},
+    {ST7789_DATA, 0x2F},
+    {ST7789_DATA, 0x1F},
+    {ST7789_DATA, 0x10},
+    {ST7789_DATA, 0x20},
+    {ST7789_CMD, 0x23},
+		/* Display Inversion On */
+    {ST7789_CMD, 0x21},
+		{ST7789_CMD, 0x29},
+		#if 1
+    {ST7789_CMD, 0x2a},
+    {ST7789_DATA, 0x00},
+    {ST7789_DATA, 0x00},
+    {ST7789_DATA, 0x00},
+    {ST7789_DATA, 0xef},
+    {ST7789_CMD, 0x2b},
+    {ST7789_DATA, 0x00},
+    {ST7789_DATA, 0x00},
+    {ST7789_DATA, 0x00},
+    {ST7789_DATA, 0xef},
+    {ST7789_CMD, 0x2c},
+		#endif
+    {ST7789_END, ST7789_END},
+};
 
 /**
  *@brief		LCD控制引脚初始化
@@ -86,7 +179,11 @@ static void LCD_GPIO_Init(void)
  */
 static void LCD_SPI_Send(uint8_t *data, uint16_t size)
 {
-    SPI2_WriteByte(data, size);
+		for(int i = 0 ; i < size ; i++)
+		{
+			*((uint8_t*)&hspi2.Instance->DR) = data[i];
+			while(__HAL_SPI_GET_FLAG(&hspi2, SPI_FLAG_TXE) != 1){}
+		}
 }
 
 /**
@@ -222,6 +319,43 @@ void LCD_Clear(uint16_t color)
 }
 
 
+//配置启动参数
+static void st7789_run_cfg_script(void)
+{
+    uint8_t data[2] = {0};
+    int i = 0;
+    int end_script = 0;
+
+    do
+    {
+        switch (st7789_cfg_script[i].cmd)
+        {
+            case ST7789_START:
+                break;
+
+            case ST7789_CMD:
+                data[0] = st7789_cfg_script[i].data ;
+								LCD_Write_Cmd(data[0]);
+                break;
+
+            case ST7789_DATA:
+                data[0] = st7789_cfg_script[i].data ;
+								LCD_Write_Data(data[0]);
+                break;
+
+            case ST7789_DELAY:
+                HAL_Delay(120);
+                break;
+
+            case ST7789_END:
+                end_script = 1;
+        }
+
+        i++;
+    }
+    while (!end_script);
+}
+
 /**
  * @brief	LCD初始化
  * @param   none
@@ -229,106 +363,11 @@ void LCD_Clear(uint16_t color)
  */
 void LCD_Init(void)
 {
-    LCD_GPIO_Init();
-
-    HAL_Delay(120);
-	
-    /* Sleep Out */
-    LCD_Write_Cmd(0x11);
-    /* wait for power stability */
-    HAL_Delay(120);
-
-    /* Memory Data Access Control */
-    LCD_Write_Cmd(0x36);
-    LCD_Write_Data(0x00);
-
-    /* RGB 5-6-5-bit  */
-    LCD_Write_Cmd(0x3A);
-    LCD_Write_Data(0x65);
-
-    /* Porch Setting */
-    LCD_Write_Cmd(0xB2);
-    LCD_Write_Data(0x0C);
-    LCD_Write_Data(0x0C);
-    LCD_Write_Data(0x00);
-    LCD_Write_Data(0x33);
-    LCD_Write_Data(0x33);
-
-    /*  Gate Control */
-    LCD_Write_Cmd(0xB7);
-    LCD_Write_Data(0x72);
-
-    /* VCOM Setting */
-    LCD_Write_Cmd(0xBB);
-    LCD_Write_Data(0x3D);   //Vcom=1.625V
-
-    /* LCM Control */
-    LCD_Write_Cmd(0xC0);
-    LCD_Write_Data(0x2C);
-
-    /* VDV and VRH Command Enable */
-    LCD_Write_Cmd(0xC2);
-    LCD_Write_Data(0x01);
-
-    /* VRH Set */
-    LCD_Write_Cmd(0xC3);
-    LCD_Write_Data(0x19);
-
-    /* VDV Set */
-    LCD_Write_Cmd(0xC4);
-    LCD_Write_Data(0x20);
-
-    /* Frame Rate Control in Normal Mode */
-    LCD_Write_Cmd(0xC6);
-   // LCD_Write_Data(0x0F);	//60HZ
-		LCD_Write_Data(0x01);		//111Hz 提升屏的刷新速度
-
-    /* Power Control 1 */
-    LCD_Write_Cmd(0xD0);
-    LCD_Write_Data(0xA4);
-    LCD_Write_Data(0xA1);
-
-    /* Positive Voltage Gamma Control */
-    LCD_Write_Cmd(0xE0);
-    LCD_Write_Data(0xD0);
-    LCD_Write_Data(0x04);
-    LCD_Write_Data(0x0D);
-    LCD_Write_Data(0x11);
-    LCD_Write_Data(0x13);
-    LCD_Write_Data(0x2B);
-    LCD_Write_Data(0x3F);
-    LCD_Write_Data(0x54);
-    LCD_Write_Data(0x4C);
-    LCD_Write_Data(0x18);
-    LCD_Write_Data(0x0D);
-    LCD_Write_Data(0x0B);
-    LCD_Write_Data(0x1F);
-    LCD_Write_Data(0x23);
-
-    /* Negative Voltage Gamma Control */
-    LCD_Write_Cmd(0xE1);
-    LCD_Write_Data(0xD0);
-    LCD_Write_Data(0x04);
-    LCD_Write_Data(0x0C);
-    LCD_Write_Data(0x11);
-    LCD_Write_Data(0x13);
-    LCD_Write_Data(0x2C);
-    LCD_Write_Data(0x3F);
-    LCD_Write_Data(0x44);
-    LCD_Write_Data(0x51);
-    LCD_Write_Data(0x2F);
-    LCD_Write_Data(0x1F);
-    LCD_Write_Data(0x1F);
-    LCD_Write_Data(0x20);
-    LCD_Write_Data(0x23);
-
-    /* Display Inversion On */
-    LCD_Write_Cmd(0x21);
-
-    LCD_Write_Cmd(0x29);
-
-    LCD_Address_Set(0, 0, LCD_Width - 1, LCD_Height - 1);
-		LCD_Clear(BLACK);
+		LCD_GPIO_Init();
+		/*使能SPI单线发送模式*/
+		SPI_1LINE_TX(&hspi2);
+		__HAL_SPI_ENABLE(&hspi2);
+    st7789_run_cfg_script();
 }
 /**
  * @brief		带颜色画点函数
@@ -560,7 +599,7 @@ void LCD_Fill(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color
     }
 		tos_knl_sched_unlock();
 }
-#if USE_ASCII_FONT_LIB
+
 /**
  * @brief	显示一个ASCII码字符
  * @param   x,y		显示起始坐标
@@ -689,7 +728,7 @@ void LCD_ShowCharStr(uint16_t x, uint16_t y, uint8_t max_width, char* str, uint1
 	}
 	tos_knl_sched_unlock();
 }
-#endif /* USE_ASCII_FONT_LIB */
+
 /**
  * @breif		带颜色画六芒星函数
  * @param   x,y —— 六芒星中心点
@@ -714,7 +753,7 @@ void LCD_Draw_ColorSixPointStar(uint16_t x, uint16_t y, uint8_t r, uint16_t colo
 
 }
 
-#if USE_PICTURE_DISPLAY
+
 /**
  * @brief	显示图片函数
  * @param   x,y	    —— 起点坐标
@@ -756,37 +795,7 @@ void LCD_Show_Image(uint16_t x, uint16_t y, uint16_t width, uint16_t height, con
             
     }  
 }
-#endif /*  USE_PICTURE_DISPLAY */
 
-
-/**********************************************************/
-//显示汉字
-/******************************************************************************
-      函数说明：显示汉字串
-      入口数据：x,y显示坐标
-                *s 要显示的汉字串
-                fc 字的颜色
-                bc 字的背景色
-                sizey 字号 可选 16 24 32
-                mode:  0非叠加模式  1叠加模式
-      返回值：  无
-******************************************************************************/
-void LCD_ShowChinese(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t bc,uint8_t sizey,uint8_t mode)
-{
-	tos_knl_sched_lock();
-	while(*s!=0)
-	{
-		if(sizey==12) LCD_ShowChinese12x12(x,y,s,fc,bc,sizey,mode);
-		else if(sizey==16) LCD_ShowChinese16x16(x,y,s,fc,bc,sizey,mode);
-		else if(sizey==24) LCD_ShowChinese24x24(x,y,s,fc,bc,sizey,mode);
-		else if(sizey==32) LCD_ShowChinese32x32(x,y,s,fc,bc,sizey,mode);
-		else if(sizey==48) LCD_ShowChinese48x48(x,y,s,fc,bc,sizey,mode);
-		else return;
-		s+=2;
-		x+=sizey;
-	}
-	tos_knl_sched_unlock();
-}
 
 /******************************************************************************
       函数说明：显示单个12x12汉字
@@ -1078,6 +1087,34 @@ void LCD_ShowChinese48x48(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t 
 	}
 }
 
+/**********************************************************/
+//显示汉字
+/******************************************************************************
+      函数说明：显示汉字串
+      入口数据：x,y显示坐标
+                *s 要显示的汉字串
+                fc 字的颜色
+                bc 字的背景色
+                sizey 字号 可选 16 24 32
+                mode:  0非叠加模式  1叠加模式
+      返回值：  无
+******************************************************************************/
+void LCD_ShowChinese(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t bc,uint8_t sizey,uint8_t mode)
+{
+	tos_knl_sched_lock();
+	while(*s!=0)
+	{
+		if(sizey==12) LCD_ShowChinese12x12(x,y,s,fc,bc,sizey,mode);
+		else if(sizey==16) LCD_ShowChinese16x16(x,y,s,fc,bc,sizey,mode);
+		else if(sizey==24) LCD_ShowChinese24x24(x,y,s,fc,bc,sizey,mode);
+		else if(sizey==32) LCD_ShowChinese32x32(x,y,s,fc,bc,sizey,mode);
+		else if(sizey==48) LCD_ShowChinese48x48(x,y,s,fc,bc,sizey,mode);
+		else return;
+		s+=2;
+		x+=sizey;
+	}
+	tos_knl_sched_unlock();
+}
 
 
 

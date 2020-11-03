@@ -9,7 +9,7 @@
 /*一个文件存储检测记录的条数*/
 #define DETECT_DATA_INDEX 100
 
-typedef struct 
+typedef struct
 {
     int serial_number ; 		//序号
     int year ; 					//2019-

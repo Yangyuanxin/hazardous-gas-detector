@@ -117,17 +117,7 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
 }
 
 /* USER CODE BEGIN 1 */
-/**
-* @brief		SPI2 发送一个字节
-* @param   TxData	要发送的数据
-* @param   size	发送数据的字节大小
- * @return  uint8_t		0:写入成功,其他:写入失败
- */
-uint8_t SPI2_WriteByte(uint8_t *TxData, uint16_t size)
-{
-    return HAL_SPI_Transmit(&hspi2, TxData, size, 1000);
-    //return HAL_SPI_Transmit_DMA(&hspi2, TxData, size);
-}
+
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

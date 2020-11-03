@@ -39,7 +39,7 @@ extern SPI_HandleTypeDef hspi2;
 void MX_SPI2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-uint8_t SPI2_WriteByte(uint8_t *TxData,uint16_t size);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
