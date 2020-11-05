@@ -62,6 +62,7 @@ void LCD_Address_Set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 void LCD_OpenWindow(uint16_t usX, uint16_t usY, uint16_t usWidth, uint16_t usHeight);
 void LCD_DisplayOn(void);
 void LCD_DisplayOff(void);
+void LCD_DisplayOnoff(uint8_t status);
 void LCD_Clear(uint16_t color);
 void LCD_Init(void);			//LCD³õÊ¼»¯º¯Êý
 void LCD_Draw_ColorPoint(uint16_t x, uint16_t y,uint16_t color);

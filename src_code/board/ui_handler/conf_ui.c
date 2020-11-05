@@ -177,7 +177,7 @@ void conf_page_process(uint8_t Event_Code)
                 display_menu_item(Conf_Item_Display, i);
 
             Flow_Cursor.flow_cursor = MAIN_PAGE ;
-            Select_Main_Menu_Item(main_item);
+            Select_Main_Menu_Item(main_page_ui.select_item);
             LCD_DisplayOn();
             break ;
 

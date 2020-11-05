@@ -324,7 +324,7 @@ void log_page_process(uint8_t KeyValue)
                     DateTime_Handler_Info.hour, DateTime_Handler_Info.minute, DateTime_Handler_Info.sec
                    );
             LCD_ShowCharStr(0, 5, 240, DateTime_Handler_Info.DisPlay_DateBuf, BLACK, WHITE, 24);
-            Select_Main_Menu_Item(main_item);
+            Select_Main_Menu_Item(main_page_ui.select_item);
             //¿ªLCDÏÔÊ¾
             LCD_DisplayOn();
             break ;

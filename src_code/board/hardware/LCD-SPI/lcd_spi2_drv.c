@@ -287,6 +287,15 @@ void LCD_DisplayOff(void)
 {
     LCD_PWR(0);
 }
+
+void LCD_DisplayOnoff(uint8_t status)
+{
+	if(0 == status)
+		LCD_DisplayOff();
+	else
+		LCD_DisplayOn();
+}
+
 /**
  * @brief	以一种颜色清空LCD屏
  * @param   color —— 清屏颜色(16bit)

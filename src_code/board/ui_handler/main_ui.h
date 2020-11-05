@@ -2,8 +2,13 @@
 #define __MAIN_UI_H
 #include "main.h"
 
+typedef struct
+{
+    uint8_t select_item ;
+    char 	display_buf[10];
+} Main_Page_Ui ;
+extern Main_Page_Ui main_page_ui ;
 
-extern uint8_t main_item ;
 /*主页面初始化*/
 void main_page_init(void);
 /*主页面事件处理*/

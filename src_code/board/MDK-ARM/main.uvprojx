@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32L4xx_HAL_Driver/Inc;../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32L4xx/Include;../Drivers/CMSIS/Include;..\hardware\Key;..\hardware\LCD-SPI;..\hardware\MultTimer;..\famework;..\ui_handler;..\logic;../FATFS/Target;../FATFS/App;../Middlewares/Third_Party/FatFs/src;..\famework\sensor;..\..\arch\arm\arm-v7m\common\include;..\..\arch\arm\arm-v7m\cortex-m4\armcc;..\..\kernel\core\include;..\..\kernel\pm\include;..\..\kernel\hal\include;..\..\osal\cmsis_os;..\..\TOS_CONFIG;..\..\device\esp8266;..\..\net\at\include;..\..\net\sal_module_wrapper;..\..\net\socket_wrapper\include;..\..\platform\hal\st\stm32l4xx\src;..\hardware\ini_parse;..\hardware\filesystem</IncludePath>
+              <IncludePath>../Core/Inc;  ../Drivers/STM32L4xx_HAL_Driver/Inc;  ../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy;  ../Drivers/CMSIS/Device/ST/STM32L4xx/Include;  ../Drivers/CMSIS/Include;  ..\hardware\Key;  ..\hardware\LCD-SPI;  ..\hardware\MultTimer;  ..\famework;  ..\ui_handler;  ..\logic;  ../FATFS/Target;  ../FATFS/App;  ../Middlewares/Third_Party/FatFs/src;  ..\famework\sensor;  ..\..\arch\arm\arm-v7m\common\include;  ..\..\arch\arm\arm-v7m\cortex-m4\armcc;  ..\..\kernel\core\include;  ..\..\kernel\pm\include;  ..\..\kernel\hal\include;  ..\..\osal\cmsis_os;  ..\..\TOS_CONFIG;  ..\..\device\esp8266;  ..\..\net\at\include;  ..\..\net\sal_module_wrapper;  ..\..\net\socket_wrapper\include;  ..\..\platform\hal\st\stm32l4xx\src;  ..\hardware\ini_parse;  ..\hardware\filesystem;  ..\famework\lcd_driver_frame</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -648,9 +648,24 @@
               <FilePath>..\famework\menu_ui.c</FilePath>
             </File>
             <File>
+              <FileName>lcd_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\famework\lcd_driver_frame\lcd_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd_device.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\famework\lcd_driver_frame\lcd_device.c</FilePath>
+            </File>
+            <File>
               <FileName>sensor_frame.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\famework\sensor\sensor_frame.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd_driver_frame.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\famework\lcd_driver_frame\lcd_driver_frame.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -716,6 +731,11 @@
               <FileName>logic.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\logic\logic.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\logic\app_init.c</FilePath>
             </File>
             <File>
               <FileName>bsp_bmp.c</FileName>

@@ -9,6 +9,12 @@ typedef struct OP_STRUCT
 	menu_op_func opfun ;		/*带参数的操作方法*/
 }OP_MENU_PAGE;
 
+/*事件处理*/
+typedef struct 
+{
+	void (*handler_func)();
+}Event_Frame ;
+
 
 void Enter_Page(uint8_t index,uint8_t KeyValue);
 void Menu_Select_Item(uint8_t current_index, uint8_t KeyValue);

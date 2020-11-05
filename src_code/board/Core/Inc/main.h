@@ -63,6 +63,8 @@ extern "C" {
 #include "threshold_ui.h"
 #include "version_info_ui.h"
 #include "alarm_setting_ui.h"
+
+#include "app_init.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -84,7 +86,7 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void SystemClock_Config(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

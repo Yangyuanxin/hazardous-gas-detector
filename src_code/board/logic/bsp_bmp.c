@@ -30,8 +30,8 @@
 #define BMP_DEBUG_PRINTF(FORMAT,...)  //printf(FORMAT,##__VA_ARGS__)	
 
 /* 私有变量 ------------------------------------------------------------------*/
-uint8_t pColorData[960];					/* 一行真彩色数据缓存 320 * 3 = 960 */
-//uint8_t pColorData[720];					/* 一行真彩色数据缓存 240 * 3 = 720 */
+//uint8_t pColorData[960];					/* 一行真彩色数据缓存 320 * 3 = 960 */
+uint8_t pColorData[720];					/* 一行真彩色数据缓存 240 * 3 = 720 */
 FIL file;
 extern FRESULT f_res;
 UINT f_num;
@@ -155,10 +155,9 @@ void Lcd_show_bmp(uint16_t x, uint16_t y, char *pic_name)
             /* 读取一行bmp的数据到数组pColorData里面 */
             f_read(&file, pColorData, l_width, &f_num);
 
-            for(j = 0; j < width; j++) 											 //一行有效信息
+            for(j = 0; j < width; j++) //一行有效信息
             {
-                k = j * 3;																	 //一行中第K个像素的起点
-                //LCD_WRITE_DATA(RGB24TORGB16(pColorData[k+2],pColorData[k+1],pColorData[k])); //写入LCD-GRAM
+                k = j * 3;	//一行中第K个像素的起点
                 LCD_Write_2Byte(RGB24TORGB16(pColorData[k + 2], pColorData[k + 1], pColorData[k]));
             }
         }
@@ -167,5 +166,6 @@ void Lcd_show_bmp(uint16_t x, uint16_t y, char *pic_name)
     f_close(&file);
     tos_knl_sched_unlock();
 }
+
 /******************* (C) COPYRIGHT 2015-2020 硬石嵌入式开发团队 *****END OF FILE****/
 
