@@ -60,6 +60,12 @@ void lcd_show_ascii_str(LCD_Ascii_Show_Para para)
 	lcd_device.lcd_show_ascii_str(para.x,para.y,para.max_width,para.str,para.bc,para.fc,para.sizey);
 }
 
+/*LCDÏÔÊ¾BMPÍ¼Ïñ*/
+void lcd_show_bmp(LCD_Bmp_Show_Para para)
+{
+	lcd_device.Lcd_show_bmp(para.x,para.y,para.pic_name);
+}
+
 LCD_Driver lcd_driver =
 {
     .lcd_init              =  lcd_init,
@@ -73,6 +79,7 @@ LCD_Driver lcd_driver =
     .lcd_show_image        =  lcd_show_image,
     .lcd_show_ascii_str    =  lcd_show_ascii_str,
     .lcd_show_chinese_str  =  lcd_show_chinese_str,
+		.Lcd_show_bmp					 =  lcd_show_bmp,
 };
 
 

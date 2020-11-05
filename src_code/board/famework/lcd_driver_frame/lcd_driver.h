@@ -67,6 +67,13 @@ typedef struct
     uint8_t mode ;
 } LCD_Chinese_Show_Para ;
 
+/*bmp显示接口参数*/
+typedef struct
+{
+		uint16_t x;
+		uint16_t y; 
+		char *pic_name;
+}LCD_Bmp_Show_Para ;
 
 /*lcd驱动接口*/
 typedef struct
@@ -91,6 +98,9 @@ typedef struct
     void (*lcd_show_chinese_str)(LCD_Chinese_Show_Para para);
     /*LCD显示ASCII字符串*/
     void (*lcd_show_ascii_str)(LCD_Ascii_Show_Para para);
+	
+		/*LCD显示BMP图像*/
+		void (*Lcd_show_bmp)(LCD_Bmp_Show_Para para);
 } LCD_Driver ;
 extern LCD_Driver lcd_driver;
 

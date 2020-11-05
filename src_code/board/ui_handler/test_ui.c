@@ -2,49 +2,50 @@
 #include "bsp_bmp.h"
 
 
+
+LCD_Bmp_Show_Para test_baseline_ui_bmp[] =
+{
+    {76, 40, B0_LOGO},
+    {76, 40, B1_LOGO},
+    {76, 40, B2_LOGO},
+};
+
+LCD_Bmp_Show_Para test_detecting_ui_bmp[] =
+{
+    {76, 40, D0_LOGO},
+    {76, 40, D1_LOGO},
+    {76, 40, D2_LOGO},
+};
+
+LCD_Bmp_Show_Para test_result_ui_bmp[] =
+{
+    {76, 40, R0_LOGO},
+    {76, 40, R1_LOGO},
+};
+
+LCD_Chinese_Show_Para test_font[] =
+{
+    {94, 130, (uint8_t *)"基准", WHITE, BLACK, 24, 1},
+    {94, 130, (uint8_t *)"检测", WHITE, BLACK, 24, 1},
+    {94, 130, (uint8_t *)"安全", GREEN, BLACK, 24, 1},
+    {94, 130, (uint8_t *)"危险", RED, BLACK, 24, 1},
+};
+
+LCD_Fill_Para test_fill[] =
+{
+    /*图标刷黑*/
+    {76, 76 + 84, 40, 40 + 84, BLACK},
+    /*字体刷黑*/
+    {94, 94 + 48, 130, 130 + 24, BLACK},
+};
+
 //刷新动画
 void icon_reflash(uint8_t status)
 {
     if(Sensor_Flow_Cursor.Detect_Step == BASE_LINE)
-    {
-        switch(status)
-        {
-            case 0:
-                Lcd_show_bmp(DETECT_LOGO_X, DETECT_LOGO_Y, B0_LOGO);
-                break ;
-
-            case 1:
-                Lcd_show_bmp(DETECT_LOGO_X, DETECT_LOGO_Y, B1_LOGO);
-                break ;
-
-            case 2:
-                Lcd_show_bmp(DETECT_LOGO_X, DETECT_LOGO_Y, B2_LOGO);
-                break ;
-
-            default:
-                break ;
-        }
-    }
+        lcd_model.lcd_driver->Lcd_show_bmp(test_baseline_ui_bmp[status]);
     else if(Sensor_Flow_Cursor.Detect_Step == DETECTING)
-    {
-        switch(status)
-        {
-            case 0:
-                Lcd_show_bmp(DETECT_LOGO_X, DETECT_LOGO_Y, D0_LOGO);
-                break ;
-
-            case 1:
-                Lcd_show_bmp(DETECT_LOGO_X, DETECT_LOGO_Y, D1_LOGO);
-                break ;
-
-            case 2:
-                Lcd_show_bmp(DETECT_LOGO_X, DETECT_LOGO_Y, D2_LOGO);
-                break ;
-
-            default:
-                break ;
-        }
-    }
+        lcd_model.lcd_driver->Lcd_show_bmp(test_detecting_ui_bmp[status]);
 }
 
 /*显示基准1隐藏0*/
@@ -52,13 +53,13 @@ void display_base(uint8_t enable)
 {
     if(enable == 1)
     {
-        Lcd_show_bmp(DETECT_LOGO_X, DETECT_LOGO_Y, B2_LOGO);
-        LCD_ShowChinese(94, 130, (uint8_t *)"基准", WHITE, BLACK, 24, 1);
+        lcd_model.lcd_driver->Lcd_show_bmp(test_baseline_ui_bmp[2]);
+        lcd_model.lcd_driver->lcd_show_chinese_str(test_font[0]);
     }
     else if(enable == 0)
     {
-        LCD_Fill(DETECT_LOGO_X, DETECT_LOGO_Y, DETECT_LOGO_X + 84, DETECT_LOGO_Y + 84, BLACK);
-        LCD_Fill(94, 130, 94 + 48, 130 + 24, BLACK);
+        lcd_model.lcd_driver->lcd_fill(test_fill[0]);
+        lcd_model.lcd_driver->lcd_fill(test_fill[1]);
     }
 }
 
@@ -67,13 +68,13 @@ void display_detect(uint8_t enable)
 {
     if(enable == 1)
     {
-        Lcd_show_bmp(DETECT_LOGO_X, DETECT_LOGO_Y, D2_LOGO);
-        LCD_ShowChinese(94, 130, (uint8_t *)"检测", WHITE, BLACK, 24, 1);
+        lcd_model.lcd_driver->Lcd_show_bmp(test_detecting_ui_bmp[2]);
+        lcd_model.lcd_driver->lcd_show_chinese_str(test_font[1]);
     }
     else if(enable == 0)
     {
-        LCD_Fill(DETECT_LOGO_X, DETECT_LOGO_Y, DETECT_LOGO_X + 84, DETECT_LOGO_Y + 84, BLACK);
-        LCD_Fill(94, 130, 94 + 48, 130 + 24, BLACK);
+        lcd_model.lcd_driver->lcd_fill(test_fill[0]);
+        lcd_model.lcd_driver->lcd_fill(test_fill[1]);
     }
 }
 
@@ -82,13 +83,13 @@ void display_safety(uint8_t enable)
 {
     if(enable == 1)
     {
-        Lcd_show_bmp(DETECT_LOGO_X, DETECT_LOGO_Y, R0_LOGO);
-        LCD_ShowChinese(94, 130, (uint8_t *)"安全", GREEN, BLACK, 24, 1);
+        lcd_model.lcd_driver->Lcd_show_bmp(test_result_ui_bmp[0]);
+        lcd_model.lcd_driver->lcd_show_chinese_str(test_font[2]);
     }
     else if(enable == 0)
     {
-        LCD_Fill(DETECT_LOGO_X, DETECT_LOGO_Y, DETECT_LOGO_X + 84, DETECT_LOGO_Y + 84, BLACK);
-        LCD_Fill(94, 130, 94 + 48, 130 + 24, BLACK);
+        lcd_model.lcd_driver->lcd_fill(test_fill[0]);
+        lcd_model.lcd_driver->lcd_fill(test_fill[1]);
     }
 }
 
@@ -97,28 +98,43 @@ void display_danger(uint8_t enable)
 {
     if(enable == 1)
     {
-        Lcd_show_bmp(DETECT_LOGO_X, DETECT_LOGO_Y, R1_LOGO);
-        LCD_ShowChinese(94, 130, (uint8_t *)"危险", RED, BLACK, 24, 1);
+        lcd_model.lcd_driver->Lcd_show_bmp(test_result_ui_bmp[1]);
+        lcd_model.lcd_driver->lcd_show_chinese_str(test_font[3]);
     }
     else if(enable == 0)
     {
-        LCD_Fill(DETECT_LOGO_X, DETECT_LOGO_Y, DETECT_LOGO_X + 84, DETECT_LOGO_Y + 84, BLACK);
-        LCD_Fill(94, 130, 94 + 48, 130 + 24, BLACK);
+        lcd_model.lcd_driver->lcd_fill(test_fill[0]);
+        lcd_model.lcd_driver->lcd_fill(test_fill[1]);
     }
 }
 
 /*显示进度条框*/
 void Display_Process_Bar_Frame(int enable)
 {
+    LCD_Fill_Para fill_frame ;
+    LCD_Rect_Show_Para rect_para ;
+    rect_para.x_start = 10 ;
+    rect_para.x_end = 230 ;
+    rect_para.y_start = 180 ;
+    rect_para.y_end = 190;
+
+    fill_frame.x_start = 12 ;
+    fill_frame.x_end = 228 ;
+    fill_frame.y_start = 182;
+    fill_frame.y_end = 188 ;
+    fill_frame.color = BLACK ;
+
     if(enable == 1)
     {
-        LCD_Draw_ColorRect(10, 180, 230, 190, BLUE);
-        LCD_Fill(12, 182, 228, 188, BLACK);
+        rect_para.color = BLUE ;
+        lcd_model.lcd_driver->lcd_draw_rect(rect_para);
+        lcd_model.lcd_driver->lcd_fill(fill_frame);
     }
     else if(enable == 0)
     {
-        LCD_Draw_ColorRect(10, 180, 230, 190, BLACK);
-        LCD_Fill(12, 182, 228, 188, BLACK);
+        rect_para.color = BLACK ;
+        lcd_model.lcd_driver->lcd_draw_rect(rect_para);
+        lcd_model.lcd_driver->lcd_fill(fill_frame);
     }
 }
 
@@ -126,15 +142,24 @@ void Display_Process_Bar_Frame(int enable)
 void Display_Process_Bar(int Process, int enable)
 {
     uint8_t buf[] = {20, 40, 80, 100, 120, 140, 160, 180, 200, 228};
+    LCD_Fill_Para fill_frame ;
+    fill_frame.x_start = 12 ;
+    fill_frame.y_start = 182 ;
 
     if(enable == 1)
     {
-        LCD_Fill(12, 182, buf[Process / 10], 188, GREEN);
+        fill_frame.x_end = buf[Process / 10] ;
+        fill_frame.y_end = 188 ;
+        fill_frame.color = GREEN ;
+        lcd_model.lcd_driver->lcd_fill(fill_frame);
     }
     else if(enable == 0)
     {
         Display_Process_Bar_Frame(enable);
-        LCD_Fill(12, 182, buf[9], 188, BLACK);
+        fill_frame.x_end = buf[9] ;
+        fill_frame.y_end = 188 ;
+        fill_frame.color = BLACK ;
+        lcd_model.lcd_driver->lcd_fill(fill_frame);
     }
 }
 
@@ -143,15 +168,28 @@ void display_smoke_value(int smoke_value, uint16_t color, uint8_t enable)
 {
     char display_buf[20] = {0};
     memset(display_buf, 0, 20);
+		LCD_Ascii_Show_Para smoke_value_ascii ;
     sprintf(display_buf, "%04dppm", smoke_value);
-	/*当打开了调试标志才会显示烟感值*/
-	if(User_Memory_Para.debug_flag == 1)
-	{
-		if(enable == 1)
-			LCD_ShowCharStr(SMOKE_X, SMOKE_Y, 100, display_buf, BLACK, color, 24);
-		else if(enable == 0)
-			LCD_ShowCharStr(SMOKE_X, SMOKE_Y, 100, display_buf, BLACK, BLACK, 24);
-	}
+		smoke_value_ascii.x = SMOKE_X;
+		smoke_value_ascii.y = SMOKE_Y;
+		smoke_value_ascii.max_width = 100;
+		smoke_value_ascii.str = display_buf ;
+		smoke_value_ascii.bc  = BLACK;
+		smoke_value_ascii.sizey = 24 ;
+    /*当打开了调试标志才会显示烟感值*/
+    if(User_Memory_Para.debug_flag == 1)
+    {
+        if(enable == 1)
+				{
+						smoke_value_ascii.fc  = color ;
+						lcd_model.lcd_driver->lcd_show_ascii_str(smoke_value_ascii);
+				}
+        else if(enable == 0)
+				{
+						smoke_value_ascii.fc  = BLACK ;
+            lcd_model.lcd_driver->lcd_show_ascii_str(smoke_value_ascii);
+				}
+    }
 }
 
 
@@ -179,7 +217,7 @@ void test_page_process(uint8_t Event_Code)
             mq2_sensor_interface.buzzer_control(&mq2_sensor_interface, 0);
             Display_Process_Bar(0, 0);
             display_smoke_value(0, BLACK, 0);
-            LCD_Fill(94, 130, 94 + 48, 130 + 24, BLACK);
+            lcd_model.lcd_driver->lcd_fill(test_fill[1]);
             /*显示基准*/
             display_base(1);
             break ;
@@ -193,7 +231,7 @@ void test_page_process(uint8_t Event_Code)
             Sensor_Flow_Cursor.Detect_Step = NULL_STATUS ;
             mq2_sensor_interface.led_control(&mq2_sensor_interface, 0);
             mq2_sensor_interface.buzzer_control(&mq2_sensor_interface, 0);
-            LCD_Clear(BLACK);
+            lcd_model.lcd_driver->lcd_clear(BLACK);
             Flow_Cursor.flow_cursor = MAIN_PAGE ;
             main_page_init();
             tos_knl_sched_unlock();
