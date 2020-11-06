@@ -20,12 +20,12 @@
 #ifndef __spi_H
 #define __spi_H
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
-	 
+
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -37,7 +37,7 @@ extern SPI_HandleTypeDef hspi2;
 /* USER CODE END Private defines */
 
 void MX_SPI2_Init(void);
-uint8_t SPI2_WriteByte(uint8_t *TxData,uint16_t size);
+uint8_t SPI2_WriteByte(uint8_t *TxData, uint16_t size);
 
 /* USER CODE BEGIN Prototypes */
 

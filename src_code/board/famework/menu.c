@@ -8,10 +8,9 @@ static OP_MENU_PAGE g_opStruct[] =
 	{TEST_PAGE      , 	test_page_process},
 	{LOG_PAGE		, 	log_page_process},
 	{CONF_PAGE      , 	conf_page_process},
-	{THRESHOLD_PAGE , 	threshold_page_process},
-	{ALARM_SETTING_PAGE,alarm_setting_page_process},
-	{DEBUG_PAGE		,	debug_page_process},
+	{PARA_PAGE		,   para_setting_page_process},
 	{VERSION_PAGE   , 	version_info_page_process},
+	{PASSWD_PAGE	,   password_page_process},
 };
 
 /*跳转到表所对应的页面*/
@@ -26,6 +25,7 @@ static int JUMP_Table(int8_t op , uint8_t KeyValue)
 /*菜单选择项*/
 void Menu_Select_Item(uint8_t current_index, uint8_t KeyValue)
 {
+	printf("当前页面:%d  当前键值:%d\n",current_index,KeyValue);
 	JUMP_Table(current_index , KeyValue);
 }
 /****************************************************************************************/

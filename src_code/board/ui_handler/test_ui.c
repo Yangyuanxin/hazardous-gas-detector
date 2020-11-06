@@ -39,7 +39,7 @@ LCD_Fill_Para test_fill[] =
     {94, 94 + 48, 130, 130 + 24, BLACK},
 };
 
-//刷新动画
+/*刷新动画*/
 void icon_reflash(uint8_t status)
 {
     if(Sensor_Flow_Cursor.Detect_Step == BASE_LINE)
@@ -168,30 +168,30 @@ void display_smoke_value(int smoke_value, uint16_t color, uint8_t enable)
 {
     char display_buf[20] = {0};
     memset(display_buf, 0, 20);
-		LCD_Ascii_Show_Para smoke_value_ascii ;
+    LCD_Ascii_Show_Para smoke_value_ascii ;
     sprintf(display_buf, "%04dppm", smoke_value);
-		smoke_value_ascii.x = SMOKE_X;
-		smoke_value_ascii.y = SMOKE_Y;
-		smoke_value_ascii.max_width = 100;
-		smoke_value_ascii.str = display_buf ;
-		smoke_value_ascii.bc  = BLACK;
-		smoke_value_ascii.sizey = 24 ;
+    smoke_value_ascii.x = SMOKE_X;
+    smoke_value_ascii.y = SMOKE_Y;
+    smoke_value_ascii.max_width = 100;
+    smoke_value_ascii.str = display_buf ;
+    smoke_value_ascii.bc  = BLACK;
+    smoke_value_ascii.sizey = 24 ;
+
     /*当打开了调试标志才会显示烟感值*/
     if(User_Memory_Para.debug_flag == 1)
     {
         if(enable == 1)
-				{
-						smoke_value_ascii.fc  = color ;
-						lcd_model.lcd_driver->lcd_show_ascii_str(smoke_value_ascii);
-				}
-        else if(enable == 0)
-				{
-						smoke_value_ascii.fc  = BLACK ;
+        {
+            smoke_value_ascii.fc  = color ;
             lcd_model.lcd_driver->lcd_show_ascii_str(smoke_value_ascii);
-				}
+        }
+        else if(enable == 0)
+        {
+            smoke_value_ascii.fc  = BLACK ;
+            lcd_model.lcd_driver->lcd_show_ascii_str(smoke_value_ascii);
+        }
     }
 }
-
 
 /*测试页面初始化*/
 void test_page_init(void)
@@ -204,41 +204,50 @@ void test_page_init(void)
     display_smoke_value(0, GREEN, 1);
 }
 
+
+/*重新开始测试*/
+void Handler_Test_Page_Left_Key(void)
+{
+    /*传感器检测流程初始化*/
+    Sensor_Detect_Init();
+    mq2_sensor_interface.led_control(&mq2_sensor_interface, 0);
+    mq2_sensor_interface.buzzer_control(&mq2_sensor_interface, 0);
+    Display_Process_Bar(0, 0);
+    display_smoke_value(0, BLACK, 0);
+    lcd_model.lcd_driver->lcd_fill(test_fill[1]);
+    /*显示基准*/
+    display_base(1);
+}
+
+/*退出*/
+void Handler_Test_Page_Right_Key(void)
+{
+    tos_knl_sched_lock();
+    Sensor_Flow_Cursor.Start_Detect = 0 ;
+    Sensor_Flow_Cursor.Count_Alarm = 0 ;
+    Sensor_Flow_Cursor.Test_Process = 0 ;
+    Sensor_Flow_Cursor.Detect_Step = NULL_STATUS ;
+    mq2_sensor_interface.led_control(&mq2_sensor_interface, 0);
+    mq2_sensor_interface.buzzer_control(&mq2_sensor_interface, 0);
+    lcd_model.lcd_driver->lcd_clear(BLACK);
+    Flow_Cursor.flow_cursor = MAIN_PAGE ;
+    main_page_init();
+    tos_knl_sched_unlock();
+}
+
+
+Event_Frame Test_Page_Event[] =
+{
+    {Handler_Test_Page_Left_Key},
+    {NULL},
+    {Handler_Test_Page_Right_Key},
+    {NULL},
+};
+
 /*测试页面事件处理*/
 void test_page_process(uint8_t Event_Code)
 {
-    switch(Event_Code)
-    {
-        /*重新开始测试*/
-        case LEFT:
-            /*传感器检测流程初始化*/
-            Sensor_Detect_Init();
-            mq2_sensor_interface.led_control(&mq2_sensor_interface, 0);
-            mq2_sensor_interface.buzzer_control(&mq2_sensor_interface, 0);
-            Display_Process_Bar(0, 0);
-            display_smoke_value(0, BLACK, 0);
-            lcd_model.lcd_driver->lcd_fill(test_fill[1]);
-            /*显示基准*/
-            display_base(1);
-            break ;
-
-        /*退出*/
-        case RIGHT:
-            tos_knl_sched_lock();
-            Sensor_Flow_Cursor.Start_Detect = 0 ;
-            Sensor_Flow_Cursor.Count_Alarm = 0 ;
-            Sensor_Flow_Cursor.Test_Process = 0 ;
-            Sensor_Flow_Cursor.Detect_Step = NULL_STATUS ;
-            mq2_sensor_interface.led_control(&mq2_sensor_interface, 0);
-            mq2_sensor_interface.buzzer_control(&mq2_sensor_interface, 0);
-            lcd_model.lcd_driver->lcd_clear(BLACK);
-            Flow_Cursor.flow_cursor = MAIN_PAGE ;
-            main_page_init();
-            tos_knl_sched_unlock();
-            break ;
-
-        default:
-            break ;
-    }
+    if(Test_Page_Event[Event_Code - 1].handler_func != NULL)
+        Test_Page_Event[Event_Code - 1].handler_func();
 }
 

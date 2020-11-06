@@ -25,13 +25,13 @@ Item Log_Item[] =
 {
     {LOG_TITLE_X, LOG_TITLE_Y, 				"记录查询", WHITE, BLACK, 24, 1},		//0
     {SERIAL_NUM_X, SERIAL_NUM_Y, 			"序号", 	WHITE, BLACK, 24, 1},		//1
-    {DETECT_DATETIME_X, DETECT_DATETIME_Y,  "检测时间", 	WHITE, BLACK, 24, 1},	//2
-    {DETECT_RESULT_X, DETECT_RESULT_Y, 		"检测结果", 	WHITE, BLACK, 24, 1},	//3
+    {DETECT_DATETIME_X, DETECT_DATETIME_Y,  "检测时间", WHITE, BLACK, 24, 1},	//2
+    {DETECT_RESULT_X, DETECT_RESULT_Y, 		"检测结果", WHITE, BLACK, 24, 1},	//3
 
     {LOG_TITLE_X, LOG_TITLE_Y, 				"记录查询", BLACK, BLACK, 24, 1},		//4
     {SERIAL_NUM_X, SERIAL_NUM_Y, 			"序号", 	BLACK, BLACK, 24, 1},		//5
-    {DETECT_DATETIME_X, DETECT_DATETIME_Y,  "检测时间", 	BLACK, BLACK, 24, 1},	//6
-    {DETECT_RESULT_X, DETECT_RESULT_Y, 		"检测结果", 	BLACK, BLACK, 24, 1},	//7
+    {DETECT_DATETIME_X, DETECT_DATETIME_Y,  "检测时间", BLACK, BLACK, 24, 1},	//6
+    {DETECT_RESULT_X, DETECT_RESULT_Y, 		"检测结果", BLACK, BLACK, 24, 1},	//7
 };
 
 /*记录查询页面状态显示*/
@@ -176,11 +176,13 @@ static void display_log_detect_result(uint8_t result, uint8_t enable)
     }
 }
 
-/*记录查询数据初始化*/
-void log_page_data_init(void)
+/*记录查询页面初始化*/
+void log_page_init(void)
 {
+    Flow_Cursor.flow_cursor = LOG_PAGE ;
     /*读取当前检测的流水号*/
     csv_file_record.Current_Serial_Number = User_Memory_Para.detect_log_serial_number ;
+
     if(0 == csv_file_record.Current_Serial_Number % DETECT_DATA_INDEX)
         csv_file_record.file_number_index = csv_file_record.Current_Serial_Number / DETECT_DATA_INDEX - 1 ;
     else
@@ -195,7 +197,7 @@ void log_page_data_init(void)
     /*当前没有任何数据*/
     if(0 == csv_file_record.Current_Serial_Number)
         display_no_log(1);
-		
+
     /*当前有数据*/
     else
     {
@@ -204,128 +206,115 @@ void log_page_data_init(void)
         ReadlLineData(csv_file_record.file_number_index, csv_file_record.Current_Line);
         /*显示记录存储项*/
         display_log_serial_number(csv_file_record.Current_Serial_Number, 1);
-        display_log_detect_datetime(csv_file_record.year, csv_file_record.month,csv_file_record.day, csv_file_record.hour, csv_file_record.minute, 1);
+        display_log_detect_datetime(csv_file_record.year, csv_file_record.month, csv_file_record.day, csv_file_record.hour, csv_file_record.minute, 1);
         display_log_detect_result(csv_file_record.detect_result, 1);
         /*显示记录存储项*/
     }
 }
 
-/*记录查询页面初始化*/
-void log_page_init(void)
-{
-    Flow_Cursor.flow_cursor = LOG_PAGE ;
-    log_page_data_init();
-}
-
-
-/*记录页面数据向前向后查找*/
-void log_page_data_prev_next_handler(uint8_t KeyValue)
+/*处理记录左键*/
+void Handler_Log_Page_Left_Key(void)
 {
     int ret = -1 ;
 
-    switch(KeyValue)
+    if(csv_file_record.Current_Serial_Number != 0)
     {
-        case LEFT:
-            (csv_file_record.Current_Serial_Number > 1) ? (csv_file_record.Current_Serial_Number--) :	(csv_file_record.Current_Serial_Number = 1);
-            /*计算当前数据项位于该文件的索引===>整数减1*/
-            if(0 == csv_file_record.Current_Serial_Number % 100)
-                csv_file_record.file_number_index = csv_file_record.Current_Serial_Number / 100 - 1 ;
-            else
-                csv_file_record.file_number_index = csv_file_record.Current_Serial_Number / 100 ;
+        (csv_file_record.Current_Serial_Number > 1) ? (csv_file_record.Current_Serial_Number--) :	(csv_file_record.Current_Serial_Number = 1);
 
-            /*计算当前数据项位于该文件的第几行*/
-            if((csv_file_record.Current_Serial_Number % 100 == 0) && (csv_file_record.Current_Serial_Number >= 100))
-                csv_file_record.Current_Line = csv_file_record.Current_Serial_Number % 100 + 100;
-            else
-                csv_file_record.Current_Line = csv_file_record.Current_Serial_Number % 100 ;
-            ret = ReadlLineData(csv_file_record.file_number_index, csv_file_record.Current_Line);
-            if(ret > 0)
-            {
-                display_log_serial_number(csv_file_record.Current_Serial_Number, 1);
-                display_log_detect_datetime(csv_file_record.year, csv_file_record.month,csv_file_record.day, csv_file_record.hour, csv_file_record.minute, 1);
-                display_log_detect_result(csv_file_record.detect_result, 1);
-            }
+        /*计算当前数据项位于该文件的索引===>整数减1*/
+        if(0 == csv_file_record.Current_Serial_Number % 100)
+            csv_file_record.file_number_index = csv_file_record.Current_Serial_Number / 100 - 1 ;
+        else
+            csv_file_record.file_number_index = csv_file_record.Current_Serial_Number / 100 ;
 
-            break ;
+        /*计算当前数据项位于该文件的第几行*/
+        if((csv_file_record.Current_Serial_Number % 100 == 0) && (csv_file_record.Current_Serial_Number >= 100))
+            csv_file_record.Current_Line = csv_file_record.Current_Serial_Number % 100 + 100;
+        else
+            csv_file_record.Current_Line = csv_file_record.Current_Serial_Number % 100 ;
 
-        case RIGHT:
-            (csv_file_record.Current_Serial_Number < User_Memory_Para.detect_log_serial_number) ?	(csv_file_record.Current_Serial_Number++) :	(csv_file_record.Current_Serial_Number = User_Memory_Para.detect_log_serial_number);
-            /*计算当前数据项位于该文件的索引*/
-            if(0 == csv_file_record.Current_Serial_Number % 100)
-                csv_file_record.file_number_index = csv_file_record.Current_Serial_Number / 100 - 1 ;
-            else
-                csv_file_record.file_number_index = csv_file_record.Current_Serial_Number / 100 ;
+        ret = ReadlLineData(csv_file_record.file_number_index, csv_file_record.Current_Line);
 
-            /*计算当前数据项位于该文件的第几行*/
-            if((csv_file_record.Current_Serial_Number % 100 == 0) && (csv_file_record.Current_Serial_Number >= 100))
-                csv_file_record.Current_Line = csv_file_record.Current_Serial_Number % 100 + 100;
-            else
-                csv_file_record.Current_Line = csv_file_record.Current_Serial_Number % 100 ;
-
-            ret = ReadlLineData(csv_file_record.file_number_index, csv_file_record.Current_Line);
-
-            if(ret > 0)
-            {
-                display_log_serial_number(csv_file_record.Current_Serial_Number, 1);
-                display_log_detect_datetime(csv_file_record.year, csv_file_record.month,csv_file_record.day, csv_file_record.hour, csv_file_record.minute, 1);
-                display_log_detect_result(csv_file_record.detect_result, 1);
-            }
-
-            break ;
+        if(ret > 0)
+        {
+            display_log_serial_number(csv_file_record.Current_Serial_Number, 1);
+            display_log_detect_datetime(csv_file_record.year, csv_file_record.month, csv_file_record.day, csv_file_record.hour, csv_file_record.minute, 1);
+            display_log_detect_result(csv_file_record.detect_result, 1);
+        }
     }
 }
+
+/*处理记录右键*/
+void Handler_Log_Page_Right_Key(void)
+{
+    int ret = -1 ;
+
+    if(csv_file_record.Current_Serial_Number != 0)
+    {
+        (csv_file_record.Current_Serial_Number < User_Memory_Para.detect_log_serial_number) ?	(csv_file_record.Current_Serial_Number++) :	(csv_file_record.Current_Serial_Number = User_Memory_Para.detect_log_serial_number);
+
+        /*计算当前数据项位于该文件的索引*/
+        if(0 == csv_file_record.Current_Serial_Number % 100)
+            csv_file_record.file_number_index = csv_file_record.Current_Serial_Number / 100 - 1 ;
+        else
+            csv_file_record.file_number_index = csv_file_record.Current_Serial_Number / 100 ;
+
+        /*计算当前数据项位于该文件的第几行*/
+        if((csv_file_record.Current_Serial_Number % 100 == 0) && (csv_file_record.Current_Serial_Number >= 100))
+            csv_file_record.Current_Line = csv_file_record.Current_Serial_Number % 100 + 100;
+        else
+            csv_file_record.Current_Line = csv_file_record.Current_Serial_Number % 100 ;
+
+        ret = ReadlLineData(csv_file_record.file_number_index, csv_file_record.Current_Line);
+
+        if(ret > 0)
+        {
+            display_log_serial_number(csv_file_record.Current_Serial_Number, 1);
+            display_log_detect_datetime(csv_file_record.year, csv_file_record.month, csv_file_record.day, csv_file_record.hour, csv_file_record.minute, 1);
+            display_log_detect_result(csv_file_record.detect_result, 1);
+        }
+    }
+}
+
+/*长按退回主页面记录选项*/
+void Handler_Log_Page_Right_Long_Key(void)
+{
+    LCD_Ascii_Show_Para log_serial_para = {0, 5, 240, DateTime_Handler_Info.DisPlay_DateBuf, BLACK, WHITE, 24};
+    log_item_display(0);
+
+    /*如果是在无记录显示的页面，退出时要隐藏选项*/
+    if(csv_file_record.Current_Serial_Number == 0)
+        display_no_log(0);
+    /*隐藏记录数据选项*/
+    else
+    {
+        display_log_serial_number(csv_file_record.Current_Serial_Number, 0);
+        display_log_detect_datetime(csv_file_record.year, csv_file_record.month, csv_file_record.day, csv_file_record.hour, csv_file_record.minute, 0);
+        display_log_detect_result(csv_file_record.detect_result, 0);
+    }
+
+    Flow_Cursor.flow_cursor = MAIN_PAGE ;
+    lcd_model.lcd_driver->lcd_display_onoff(0);
+    Get_RTC_Date_Time();
+    lcd_model.lcd_driver->lcd_show_ascii_str(log_serial_para);
+    Select_Main_Menu_Item(main_page_ui.select_item);
+    lcd_model.lcd_driver->lcd_display_onoff(1);
+}
+
+Event_Frame Log_Page_Event[] =
+{
+    {Handler_Log_Page_Left_Key},
+    {NULL},
+    {Handler_Log_Page_Right_Key},
+    {Handler_Log_Page_Right_Long_Key},
+};
 
 
 /*记录页面按键处理*/
 void log_page_process(uint8_t KeyValue)
 {
-		LCD_Ascii_Show_Para log_serial_para = {0, 5, 240, DateTime_Handler_Info.DisPlay_DateBuf, BLACK, WHITE, 24};
-    switch(KeyValue)
-    {
-        /*向前翻记录数据*/
-        case LEFT:
-            if(csv_file_record.Current_Serial_Number != 0)
-                log_page_data_prev_next_handler(KeyValue);
-            break ;
-
-        /*向后翻记录数据*/
-        case RIGHT:
-            if(csv_file_record.Current_Serial_Number != 0)
-                log_page_data_prev_next_handler(KeyValue);
-            break ;
-
-        /*长按退回主页面记录选项*/
-        case RIGHT_LONG:
-            log_item_display(0);
-            /*如果是在无记录显示的页面，退出时要隐藏选项*/
-            if(csv_file_record.Current_Serial_Number == 0)
-                display_no_log(0);
-            /*隐藏记录数据选项*/
-            else
-            {
-                display_log_serial_number(csv_file_record.Current_Serial_Number, 0);
-                display_log_detect_datetime(csv_file_record.year, csv_file_record.month,csv_file_record.day, csv_file_record.hour, csv_file_record.minute, 0);
-                display_log_detect_result(csv_file_record.detect_result, 0);
-            }
-
-            Flow_Cursor.flow_cursor = MAIN_PAGE ;
-            //关LCD显示
-            lcd_model.lcd_driver->lcd_display_onoff(0);
-            //显示时钟
-            Get_Date_Time();
-            sprintf(DateTime_Handler_Info.DisPlay_DateBuf, "%04d-%02d-%02d %02d:%02d:%02d", \
-                    DateTime_Handler_Info.year, DateTime_Handler_Info.month, DateTime_Handler_Info.day, \
-                    DateTime_Handler_Info.hour, DateTime_Handler_Info.minute, DateTime_Handler_Info.sec
-                   );
-						lcd_model.lcd_driver->lcd_show_ascii_str(log_serial_para);
-            Select_Main_Menu_Item(main_page_ui.select_item);
-            //开LCD显示
-            lcd_model.lcd_driver->lcd_display_onoff(1);
-            break ;
-
-        default:
-            break ;
-    }
+    if(Log_Page_Event[KeyValue - 1].handler_func != NULL)
+        Log_Page_Event[KeyValue - 1].handler_func();
 }
 
 

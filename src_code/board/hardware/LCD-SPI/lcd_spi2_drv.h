@@ -15,8 +15,6 @@
 #define LCD_Width		240
 #define LCD_Height		240
 
-
-
 /* Init script function */
 struct st7789_function
 {
@@ -41,40 +39,22 @@ enum st7789_cmd
 #define ST7789_RAMRD	0x2E
 
 
-
-//画笔颜色
-#define WHITE         0xFFFF	//白色
-#define YELLOW        0xFFE0	//黄色
-#define BRRED 		  0XFC07    //棕红色
-#define PINK          0XF81F	//粉色
-#define RED           0xF800	//红色
-#define BROWN 		  0XBC40    //棕色
-#define GRAY  		  0X8430    //灰色
-#define GBLUE		  0X07FF	//兰色
-#define GREEN         0x07E0	//绿色
-#define BLUE          0x001F    //蓝色
-#define BLACK         0x0000	//黑色
-
 void LCD_Write_Cmd(uint8_t cmd);
 void LCD_Write_Data(uint8_t dat);
 void LCD_Write_2Byte(const uint16_t dat);
 void LCD_Address_Set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 void LCD_OpenWindow(uint16_t usX, uint16_t usY, uint16_t usWidth, uint16_t usHeight);
-void LCD_DisplayOn(void);
-void LCD_DisplayOff(void);
 void LCD_DisplayOnoff(uint8_t status);
 void LCD_Clear(uint16_t color);
 void LCD_Init(void);			//LCD初始化函数
-void LCD_Draw_ColorPoint(uint16_t x, uint16_t y,uint16_t color);
+void LCD_Draw_ColorPoint(uint16_t x, uint16_t y, uint16_t color);
 void LCD_Draw_ColorLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
 void LCD_Draw_ColorRect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
 void LCD_Draw_ColorCircle(uint16_t x, uint16_t y, uint16_t r, uint16_t color);
 void LCD_Fill(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
 void LCD_ShowChar(uint16_t x, uint16_t y, char ch, uint16_t back_color, uint16_t font_color, uint8_t font_size);
 void LCD_ShowCharStr(uint16_t x, uint16_t y, uint8_t max_width, char* str, uint16_t back_color, uint16_t font_color, uint8_t font_size);
-void LCD_Draw_ColorSixPointStar(uint16_t x, uint16_t y, uint8_t r, uint16_t color);
 void LCD_Show_Image(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *p);
-
-void LCD_ShowChinese(uint16_t x,uint16_t y,uint8_t *s,uint16_t fc,uint16_t bc,uint8_t sizey,uint8_t mode);
+void LCD_ShowChinese(uint16_t x, uint16_t y, uint8_t *s, uint16_t fc, uint16_t bc, uint8_t sizey, uint8_t mode);
 
 #endif /* _LCD_SPI2_DRV_H_ */

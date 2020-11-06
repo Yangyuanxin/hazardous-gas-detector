@@ -16,6 +16,8 @@ void main_page_process(uint8_t Event_Code);
 /*左切换主页面菜单,右进入菜单项*/
 void Select_Main_Menu_Item(uint8_t item);
 
+/*获取RTC时钟并显示*/
+void Get_RTC_Date_Time(void);
 /*底部菜单栏显示*/
 void	main_menu_item_display(uint8_t enable);
 /*显示主页面*/

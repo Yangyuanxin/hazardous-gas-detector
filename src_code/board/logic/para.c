@@ -8,7 +8,8 @@ Conf_Para User_Memory_Para ;
 char *System_Config_Info =
 {
     "[Setting]\n"
-    "Vol_flag=1;\n"					/*蜂鸣器开关*/
+    "Alarm_flag=1;\n"				/*报警开关*/
+	"Value_flag=1;\n"				/*数值开关*/
     "Sensivity=1;\n"				/*灵敏度级别  0:低 1:中 2:高*/
     "Debug_flag=1;\n"				/*调试标志*/
     "Detect_Log_Serial_Number=0;\n"	/*检测数据流水号*/
@@ -32,14 +33,20 @@ static void Create_Default_InI_File(void)
     f_close(&USER_SYS_CONFIG_File);
 }
 
+
 /*加载系统参数*/
 static void Load_System_Para(void)
 {
-    /*音量*/
-    User_Memory_Para.volume = iniparser_getint(Config_ini, "Setting:Vol_flag", -1);
+    /*报警*/
+    User_Memory_Para.alarm = iniparser_getint(Config_ini, "Setting:Alarm_flag", -1);
 
-    if(-1 == User_Memory_Para.volume)
-        User_Memory_Para.volume = 1 ;
+    if(-1 == User_Memory_Para.alarm)
+        User_Memory_Para.alarm = 1 ;
+
+	/*数值*/
+	User_Memory_Para.value = iniparser_getint(Config_ini, "Setting:Value_flag", -1);
+	if(-1 == User_Memory_Para.value)
+        User_Memory_Para.value = 1 ;
 
     /*灵敏度*/
     User_Memory_Para.sensivity = iniparser_getint(Config_ini, "Setting:Sensivity", -1);
@@ -53,7 +60,8 @@ static void Load_System_Para(void)
     if(-1 == User_Memory_Para.debug_flag)
         User_Memory_Para.debug_flag = 1 ;
 
-    DEBUG("音量:%d\n", User_Memory_Para.volume);
+    DEBUG("报警:%d\n", User_Memory_Para.alarm);
+	DEBUG("数值:%d\n", User_Memory_Para.value);
     DEBUG("灵敏度:%d\n", User_Memory_Para.sensivity);
     DEBUG("调试标志:%d\n", User_Memory_Para.debug_flag);
 
@@ -123,14 +131,26 @@ void setting_debug(uint8_t status)
 }
 
 /*设置音量*/
-void setting_volume(uint8_t status)
+void setting_alarm(uint8_t status)
 {
     char buf[5] = {0};
     memset(buf, 0, 5);
     sprintf(buf, "%d", status);
-    User_Memory_Para.volume = status ;
-    iniparser_set(Config_ini, "Setting:Vol_flag", buf);
-    DEBUG("设置音量:%d\r\n", iniparser_getint(Config_ini, "Setting:Vol_flag", -1));
+    User_Memory_Para.alarm = status ;
+    iniparser_set(Config_ini, "Setting:Alarm_flag", buf);
+    DEBUG("设置报警:%d\r\n", iniparser_getint(Config_ini, "Setting:Alarm_flag", -1));
+    User_Para_Save_Process();
+}
+
+/*设置数值显示*/
+void setting_value(uint8_t status)
+{
+    char buf[5] = {0};
+    memset(buf, 0, 5);
+    sprintf(buf, "%d", status);
+    User_Memory_Para.value = status ;
+    iniparser_set(Config_ini, "Setting:Value_flag", buf);
+    DEBUG("设置数值:%d\r\n", iniparser_getint(Config_ini, "Setting:Value_flag", -1));
     User_Para_Save_Process();
 }
 

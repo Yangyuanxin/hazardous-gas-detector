@@ -29,9 +29,11 @@ osThreadDef(StartKeyTask, osPriorityRealtime, 1, KEY_TASK_SIZE);
 #define STATUS_BAR_TASK_SIZE			400
 void StartStatus_Bar_Task(void  *argument);
 osThreadDef(StartStatus_Bar_Task, osPriorityLow, 1, STATUS_BAR_TASK_SIZE);
+LCD_Bmp_Show_Para boot_logo_para ={0,0,START_LOGO};
 
 int $Sub$$main(void)
 {
+	
     extern int main(void);
     extern int $Super$$main(void);
     int ret = -1 ;
@@ -55,11 +57,10 @@ int $Sub$$main(void)
         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
         return -1 ;
     }
-
     /*读取配置信息*/
     Load_Config_ini_File();
-    Lcd_show_bmp(0, 0, START_LOGO);
-    LCD_DisplayOn();
+	lcd_model.lcd_driver->Lcd_show_bmp(boot_logo_para);
+	lcd_model.lcd_driver->lcd_display_onoff(1);
     HAL_Delay(1500);
     Sensor_Register(&mq2_sensor_interface);
 	lcd_model.lcd_driver->lcd_clear(BLACK);
@@ -129,16 +130,15 @@ void StartKeyTask(void *argument)
 }
 
 /*状态栏任务显示处理*/
+extern LCD_Ascii_Show_Para datatime_display_para ;
 void StartStatus_Bar_Task(void *argument)
 {
     while(1)
     {
         Get_Date_Time();
-        sprintf(DateTime_Handler_Info.DisPlay_DateBuf, "%04d-%02d-%02d %02d:%02d:%02d", \
-                DateTime_Handler_Info.year, DateTime_Handler_Info.month, DateTime_Handler_Info.day, \
-                DateTime_Handler_Info.hour, DateTime_Handler_Info.minute, DateTime_Handler_Info.sec
-               );
-        LCD_ShowCharStr(0, 5, 240, DateTime_Handler_Info.DisPlay_DateBuf, BLACK, WHITE, 24);
+        sprintf(DateTime_Handler_Info.DisPlay_DateBuf, "%02d:%02d:%02d", \
+                DateTime_Handler_Info.hour, DateTime_Handler_Info.minute, DateTime_Handler_Info.sec);
+		lcd_model.lcd_driver->lcd_show_ascii_str(datatime_display_para);
         tos_sleep_ms(1000);
     }
 }

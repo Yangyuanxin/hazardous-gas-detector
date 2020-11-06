@@ -113,15 +113,16 @@ void alarm_setting_page_process(uint8_t KeyValue)
         case RIGHT:
             left_right_select(KeyValue);
             break ;
+
         case RIGHT_LONG:
-						/*隐藏标题/状态1/状态2*/
+            /*隐藏标题/状态1/状态2*/
             Display_alarm_setting_page_item_font(0, BLACK);
             Display_alarm_setting_page_status1_font(0, BLACK);
             Display_alarm_setting_page_status2_font(0, BLACK);
-						/*保存报警设置参数*/
-						setting_volume(alarm_setting_page_ui.select_item);
+            /*保存报警设置参数*/
+            setting_volume(alarm_setting_page_ui.select_item);
             /*返回配置页面*/
-						conf_page_ui_init(1);
+            conf_page_ui_init(1);
             break ;
 
         default:

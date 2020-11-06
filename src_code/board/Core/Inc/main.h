@@ -47,7 +47,6 @@ extern "C" {
 #include "key.h"
 #include "para.h"
 #include "filesystem.h"
-#include "lcd_spi2_drv.h"
 
 #include "menu.h"
 #include "menu_ui.h"
@@ -58,11 +57,11 @@ extern "C" {
 #include "test_ui.h"
 #include "main_ui.h"
 #include "conf_ui.h"
-#include "debug_ui.h"
+#include "para_ui.h"
 #include "sleep_ui.h"
-#include "threshold_ui.h"
+//#include "datetime_ui.h"
+#include "password_ui.h"
 #include "version_info_ui.h"
-#include "alarm_setting_ui.h"
 
 #include "app_init.h"
 /* USER CODE END Includes */

@@ -688,6 +688,11 @@
               <FilePath>..\ui_handler\conf_ui.c</FilePath>
             </File>
             <File>
+              <FileName>para_ui.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui_handler\para_ui.c</FilePath>
+            </File>
+            <File>
               <FileName>main_ui.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ui_handler\main_ui.c</FilePath>
@@ -698,24 +703,14 @@
               <FilePath>..\ui_handler\sleep_ui.c</FilePath>
             </File>
             <File>
-              <FileName>debug_ui.c</FileName>
+              <FileName>password_ui.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\ui_handler\debug_ui.c</FilePath>
-            </File>
-            <File>
-              <FileName>threshold_ui.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui_handler\threshold_ui.c</FilePath>
+              <FilePath>..\ui_handler\password_ui.c</FilePath>
             </File>
             <File>
               <FileName>version_info_ui.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ui_handler\version_info_ui.c</FilePath>
-            </File>
-            <File>
-              <FileName>alarm_setting_ui.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui_handler\alarm_setting_ui.c</FilePath>
             </File>
           </Files>
         </Group>

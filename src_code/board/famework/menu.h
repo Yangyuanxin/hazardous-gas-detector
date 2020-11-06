@@ -16,7 +16,6 @@ typedef struct
 }Event_Frame ;
 
 
-void Enter_Page(uint8_t index,uint8_t KeyValue);
 void Menu_Select_Item(uint8_t current_index, uint8_t KeyValue);
 
 

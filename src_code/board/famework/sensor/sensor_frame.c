@@ -15,8 +15,8 @@ void sensor_detect_danger(int adc);
 /*传感器驱动表定义*/
 static sensor_frame sensor_opStruct[] =
 {
-    {BASE_LINE_STEP, 		 sensor_base_line_step},
-    {DETECTING_STEP, 		 sensor_detecting_step},
+    {BASE_LINE_STEP, 	 sensor_base_line_step},
+    {DETECTING_STEP, 	 sensor_detecting_step},
     {DETECT_SAFETY_STEP, sensor_detect_safety},
     {DETECT_DANGER_STEP, sensor_detect_danger},
 };
@@ -160,7 +160,7 @@ void sensor_detect_danger(int adc)
     static uint8_t Refresh_Alarm = 0 ;
     Refresh_Alarm = !Refresh_Alarm ;
     mq2_sensor_interface.led_control(&mq2_sensor_interface, Refresh_Alarm);
-		if(User_Memory_Para.volume == 1)
+		if(User_Memory_Para.alarm == 1)
 			mq2_sensor_interface.buzzer_control(&mq2_sensor_interface, Refresh_Alarm);
     if(Sensor_Flow_Cursor.Count_AMI == 0)
     {

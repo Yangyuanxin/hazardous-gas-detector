@@ -8,8 +8,8 @@
 
 typedef struct
 {
-	LCD_Driver *lcd_driver ;
-}LCD_Driver_Model;
+    LCD_Driver *lcd_driver ;
+} LCD_Driver_Model;
 
 void Register_Driver_Model(LCD_Driver_Model *lcd_driver_model);
 

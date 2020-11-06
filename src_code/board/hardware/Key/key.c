@@ -6,20 +6,23 @@ void PowerOn(void)
 {
     static uint32_t power_press_count = 0;
     HAL_Delay(500);
+
     while(1)
     {
         if(HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin) == 0)
         {
             power_press_count ++;
-						
+
             if(power_press_count >= 100)
             {
-								//开指示灯
-								HAL_GPIO_WritePin(GPIOC, LED_Pin, GPIO_PIN_SET);
+                //开指示灯
+                HAL_GPIO_WritePin(GPIOC, LED_Pin, GPIO_PIN_SET);
+
                 while(HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin) == 0)
                 {
                     HAL_Delay(10);
                 }
+
                 break;
             }
         }

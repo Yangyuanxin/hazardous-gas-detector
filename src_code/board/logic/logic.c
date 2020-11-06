@@ -54,7 +54,7 @@ void standby_mode(void)
             //开指示灯
             HAL_GPIO_WritePin(GPIOC, LED_Pin, GPIO_PIN_SET);
             //关屏
-            LCD_DisplayOff();
+			lcd_model.lcd_driver->lcd_display_onoff(0);
             status = 1 ;
             break ;
 
@@ -63,7 +63,7 @@ void standby_mode(void)
             //关指示灯
             HAL_GPIO_WritePin(GPIOC, LED_Pin, GPIO_PIN_RESET);
             //开屏
-            LCD_DisplayOn();
+			lcd_model.lcd_driver->lcd_display_onoff(1);
             status = 0 ;
             break ;
 

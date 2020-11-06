@@ -2,35 +2,47 @@
 #define __LCD_DRIVER_H
 #include <stdint.h>
 
+/*画笔颜色*/
+#define WHITE         0xFFFF	//白色
+#define YELLOW        0xFFE0	//黄色
+#define BRRED 		  0XFC07    //棕红色
+#define PINK          0XF81F	//粉色
+#define RED           0xF800	//红色
+#define BROWN 		  0XBC40    //棕色
+#define GRAY  		  0X8430    //灰色
+#define GBLUE		  0X07FF	//兰色
+#define GREEN         0x07E0	//绿色
+#define BLUE          0x001F    //蓝色
+#define BLACK         0x0000	//黑色
 
 /*给一块区域赋色接口参数*/
 typedef struct
 {
-    uint16_t x_start; 
-	uint16_t x_end	;
-	uint16_t y_start; 
-	uint16_t y_end	;
-	uint16_t color	;
+    uint16_t x_start;
+    uint16_t x_end	;
+    uint16_t y_start;
+    uint16_t y_end	;
+    uint16_t color	;
 } LCD_Fill_Para ;
 
 /*画线显示接口参数*/
 typedef struct
 {
-    uint16_t x_start; 
-	uint16_t x_end	;
-	uint16_t y_start; 
-	uint16_t y_end	;
-	uint16_t color	;
+    uint16_t x_start;
+    uint16_t x_end	;
+    uint16_t y_start;
+    uint16_t y_end	;
+    uint16_t color	;
 } LCD_Line_Show_Para ;
 
 /*画矩形显示接口参数*/
 typedef struct
 {
-    uint16_t x_start; 
-	uint16_t x_end	;
-	uint16_t y_start; 
-	uint16_t y_end	;
-	uint16_t color	;
+    uint16_t x_start;
+    uint16_t x_end	;
+    uint16_t y_start;
+    uint16_t y_end	;
+    uint16_t color	;
 } LCD_Rect_Show_Para ;
 
 /*ASCII字符串显示接口参数*/
@@ -70,10 +82,10 @@ typedef struct
 /*bmp显示接口参数*/
 typedef struct
 {
-		uint16_t x;
-		uint16_t y; 
-		char *pic_name;
-}LCD_Bmp_Show_Para ;
+    uint16_t x;
+    uint16_t y;
+    char *pic_name;
+} LCD_Bmp_Show_Para ;
 
 /*lcd驱动接口*/
 typedef struct
@@ -98,9 +110,9 @@ typedef struct
     void (*lcd_show_chinese_str)(LCD_Chinese_Show_Para para);
     /*LCD显示ASCII字符串*/
     void (*lcd_show_ascii_str)(LCD_Ascii_Show_Para para);
-	
-		/*LCD显示BMP图像*/
-		void (*Lcd_show_bmp)(LCD_Bmp_Show_Para para);
+
+    /*LCD显示BMP图像*/
+    void (*Lcd_show_bmp)(LCD_Bmp_Show_Para para);
 } LCD_Driver ;
 extern LCD_Driver lcd_driver;
 

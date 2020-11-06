@@ -19,12 +19,14 @@
 /*配置参数*/
 typedef struct
 {
-    int8_t volume ;					/*音量*/
+    int8_t alarm ;					/*报警*/
+	int8_t value  ;					/*数值开关*/
     int8_t sensivity;				/*灵敏度*/
     int8_t debug_flag ;				/*调试标志*/
     int detect_log_serial_number ; /*检测记录流水号*/
     /*报警阈值参数==>与灵敏度关联*/
     int16_t alarm_threshold[3];		/*报警阈值*/
+	uint8_t password[3];			/*密码*/
 } Conf_Para  ;
 extern Conf_Para User_Memory_Para ;
 
@@ -35,8 +37,10 @@ void Load_Config_ini_File(void);
 void Alarm_Threhold_Setting(void);
 /*设置调试*/
 void setting_debug(uint8_t status);
-/*设置音量*/
-void setting_volume(uint8_t status);
+/*设置报警*/
+void setting_alarm(uint8_t status);
+/*设置数值显示*/
+void setting_value(uint8_t status);
 /*设置灵敏度*/
 void setting_sensivity(uint8_t status);
 /*记录流水号保存处理*/

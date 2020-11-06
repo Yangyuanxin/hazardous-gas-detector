@@ -88,7 +88,7 @@ void debug_mode_left_right_select(uint8_t KeyValue)
 /*调试页面初始化*/
 void debug_page_ui_init(uint8_t item)
 {
-	debug_setting_page_ui.select_item = item ;
+    debug_setting_page_ui.select_item = item ;
     Flow_Cursor.flow_cursor = DEBUG_PAGE;
     /*显示标题*/
     Display_debug_mode_page_item_font(1, WHITE);
