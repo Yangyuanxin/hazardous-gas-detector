@@ -20,24 +20,25 @@ void password_input_item_display(int enable)
 /*显示密码数值*/
 void password_number_display(int enable)
 {
-	 LCD_Ascii_Show_Para password_ascii[] =
+    LCD_Ascii_Show_Para password_ascii[] =
     {
         {NUM_ONE_TEXT_X, NUM_ONE_TEXT_Y, 125, password_page_ui.display_buf, BLACK, RED, NUM_ONE_TEXT_FONT},
-		{NUM_TWO_TEXT_X, NUM_TWO_TEXT_Y, 125, password_page_ui.display_buf, BLACK, WHITE, NUM_TWO_TEXT_FONT},
-		{NUM_THREE_TEXT_X, NUM_THREE_TEXT_Y, 20, password_page_ui.display_buf, BLACK, WHITE, NUM_THREE_TEXT_FONT},
-		
-		{NUM_ONE_TEXT_X, NUM_ONE_TEXT_Y, 125, password_page_ui.display_buf, BLACK, BLACK, NUM_ONE_TEXT_FONT},
-		{NUM_TWO_TEXT_X, NUM_TWO_TEXT_Y, 125, password_page_ui.display_buf, BLACK, BLACK, NUM_TWO_TEXT_FONT},
-		{NUM_THREE_TEXT_X, NUM_THREE_TEXT_Y, 20, password_page_ui.display_buf, BLACK, BLACK, NUM_THREE_TEXT_FONT},
+        {NUM_TWO_TEXT_X, NUM_TWO_TEXT_Y, 125, password_page_ui.display_buf, BLACK, WHITE, NUM_TWO_TEXT_FONT},
+        {NUM_THREE_TEXT_X, NUM_THREE_TEXT_Y, 20, password_page_ui.display_buf, BLACK, WHITE, NUM_THREE_TEXT_FONT},
+				{NUM_FOUR_TEXT_X, NUM_FOUR_TEXT_Y, 20, password_page_ui.display_buf, BLACK, WHITE, NUM_FOUR_TEXT_FONT},
+
+        {NUM_ONE_TEXT_X, NUM_ONE_TEXT_Y, 125, password_page_ui.display_buf, BLACK, BLACK, NUM_ONE_TEXT_FONT},
+        {NUM_TWO_TEXT_X, NUM_TWO_TEXT_Y, 125, password_page_ui.display_buf, BLACK, BLACK, NUM_TWO_TEXT_FONT},
+        {NUM_THREE_TEXT_X, NUM_THREE_TEXT_Y, 20, password_page_ui.display_buf, BLACK, BLACK, NUM_THREE_TEXT_FONT},
+				{NUM_FOUR_TEXT_X, NUM_FOUR_TEXT_Y, 20, password_page_ui.display_buf, BLACK, BLACK, NUM_FOUR_TEXT_FONT},
     };
-	
+
     if(enable == 1)
     {
         memset(password_page_ui.Password, 0, 3);
-
         memset(password_page_ui.display_buf, 0, 10);
         sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[0]);
-		lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[0]);
+        lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[0]);
 
         memset(password_page_ui.display_buf, 0, 10);
         sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[1]);
@@ -46,11 +47,15 @@ void password_number_display(int enable)
         memset(password_page_ui.display_buf, 0, 10);
         sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[2]);
         lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[2]);
+			
+				memset(password_page_ui.display_buf, 0, 10);
+        sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[3]);
+        lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[3]);
     }
     else if(enable == 0)
     {
-		for(int i = 3 ; i < 6 ; i++)
-			lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[i]);
+        for(int i = 4 ; i < 8 ; i++)
+            lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[i]);
     }
 }
 
@@ -60,7 +65,7 @@ void password_page_para_init(void)
 {
     password_page_ui.select_item = 0 ;
     memset(password_page_ui.display_buf, 0, 10);
-    memset(password_page_ui.Password, 0, 3);
+    memset(password_page_ui.Password, 0, 4);
 }
 
 /*密码设置初始化*/
@@ -75,21 +80,23 @@ void password_page_init(void)
 /*选中具体密码位数调整项*/
 void select_password_item(int item)
 {
-	 LCD_Ascii_Show_Para password_ascii[] =
+    LCD_Ascii_Show_Para password_ascii[] =
     {
         {NUM_ONE_TEXT_X, NUM_ONE_TEXT_Y, 125, password_page_ui.display_buf, BLACK, WHITE, NUM_ONE_TEXT_FONT},
-		{NUM_TWO_TEXT_X, NUM_TWO_TEXT_Y, 125, password_page_ui.display_buf, BLACK, WHITE, NUM_TWO_TEXT_FONT},
-		{NUM_THREE_TEXT_X, NUM_THREE_TEXT_Y, 20, password_page_ui.display_buf, BLACK, WHITE, NUM_THREE_TEXT_FONT},
-		
-		{NUM_ONE_TEXT_X, NUM_ONE_TEXT_Y, 125, password_page_ui.display_buf, BLACK, RED, NUM_ONE_TEXT_FONT},
-		{NUM_TWO_TEXT_X, NUM_TWO_TEXT_Y, 125, password_page_ui.display_buf, BLACK, RED, NUM_TWO_TEXT_FONT},
-		{NUM_THREE_TEXT_X, NUM_THREE_TEXT_Y, 20, password_page_ui.display_buf, BLACK, RED, NUM_THREE_TEXT_FONT},
+        {NUM_TWO_TEXT_X, NUM_TWO_TEXT_Y, 125, password_page_ui.display_buf, BLACK, WHITE, NUM_TWO_TEXT_FONT},
+        {NUM_THREE_TEXT_X, NUM_THREE_TEXT_Y, 20, password_page_ui.display_buf, BLACK, WHITE, NUM_THREE_TEXT_FONT},
+				{NUM_FOUR_TEXT_X, NUM_FOUR_TEXT_Y, 20, password_page_ui.display_buf, BLACK, WHITE, NUM_FOUR_TEXT_FONT},
+
+        {NUM_ONE_TEXT_X, NUM_ONE_TEXT_Y, 125, password_page_ui.display_buf, BLACK, RED, NUM_ONE_TEXT_FONT},
+        {NUM_TWO_TEXT_X, NUM_TWO_TEXT_Y, 125, password_page_ui.display_buf, BLACK, RED, NUM_TWO_TEXT_FONT},
+        {NUM_THREE_TEXT_X, NUM_THREE_TEXT_Y, 20, password_page_ui.display_buf, BLACK, RED, NUM_THREE_TEXT_FONT},
+				{NUM_FOUR_TEXT_X, NUM_FOUR_TEXT_Y, 20, password_page_ui.display_buf, BLACK, RED, NUM_FOUR_TEXT_FONT},
     };
-	
-	
+
+
     memset(password_page_ui.display_buf, 0, 10);
     sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[0]);
-	lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[0]);
+    lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[0]);
 
     memset(password_page_ui.display_buf, 0, 10);
     sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[1]);
@@ -98,25 +105,35 @@ void select_password_item(int item)
     memset(password_page_ui.display_buf, 0, 10);
     sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[2]);
     lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[2]);
+		
+		memset(password_page_ui.display_buf, 0, 10);
+    sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[3]);
+    lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[3]);
 
     switch(password_page_ui.select_item)
     {
         case 0:
             memset(password_page_ui.display_buf, 0, 10);
             sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[0]);
-            lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[3]);
+            lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[4]);
             break ;
 
         case 1:
             memset(password_page_ui.display_buf, 0, 10);
             sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[1]);
-            lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[4]);
+            lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[5]);
             break ;
 
         case 2:
             memset(password_page_ui.display_buf, 0, 10);
             sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[2]);
-            lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[5]);
+            lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[6]);
+            break ;
+				
+				case 3:
+            memset(password_page_ui.display_buf, 0, 10);
+            sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[3]);
+            lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[7]);
             break ;
 
         default:
@@ -140,6 +157,11 @@ void jump_next_device_cail_password_item(void)
             break ;
 
         case 2:
+            password_page_ui.select_item = 3 ;
+            select_password_item(password_page_ui.select_item);
+            break ;
+				
+				case 3:
             password_page_ui.select_item = 0 ;
             select_password_item(password_page_ui.select_item);
             break ;
@@ -153,68 +175,83 @@ void jump_next_device_cail_password_item(void)
 /*密码设置页面按键处理*/
 void password_page_process(uint8_t KeyValue)
 {
-	LCD_Ascii_Show_Para password_ascii[] =
+    LCD_Ascii_Show_Para password_ascii[] =
     {
         {NUM_ONE_TEXT_X, NUM_ONE_TEXT_Y, 125, password_page_ui.display_buf, BLACK, RED, NUM_ONE_TEXT_FONT},
-		{NUM_TWO_TEXT_X, NUM_TWO_TEXT_Y, 125, password_page_ui.display_buf, BLACK, RED, NUM_TWO_TEXT_FONT},
-		{NUM_THREE_TEXT_X, NUM_THREE_TEXT_Y, 20, password_page_ui.display_buf, BLACK, RED, NUM_THREE_TEXT_FONT},
+        {NUM_TWO_TEXT_X, NUM_TWO_TEXT_Y, 125, password_page_ui.display_buf, BLACK, RED, NUM_TWO_TEXT_FONT},
+        {NUM_THREE_TEXT_X, NUM_THREE_TEXT_Y, 20, password_page_ui.display_buf, BLACK, RED, NUM_THREE_TEXT_FONT},
+				{NUM_FOUR_TEXT_X, NUM_FOUR_TEXT_Y, 20, password_page_ui.display_buf, BLACK, RED, NUM_FOUR_TEXT_FONT},
     };
+
     switch(KeyValue)
     {
-		case LEFT:
-			 jump_next_device_cail_password_item();
-		     break ;
+        case LEFT:
+            jump_next_device_cail_password_item();
+            break ;
+
         case RIGHT:
             switch(password_page_ui.select_item)
             {
                 case 0:
-                    (password_page_ui.Password[0] > 0) ? \
-                    (password_page_ui.Password[0]--) :		\
-                    (password_page_ui.Password[0] = 9);
+                    (password_page_ui.Password[0] < 9) ? \
+                    (password_page_ui.Password[0]++) :		\
+                    (password_page_ui.Password[0] = 0);
                     memset(password_page_ui.display_buf, 0, 10);
                     sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[0]);
                     lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[0]);
                     break ;
 
                 case 1:
-                    (password_page_ui.Password[1] > 0) ? \
-                    (password_page_ui.Password[1]--) :		\
-                    (password_page_ui.Password[1] = 9);
+                    (password_page_ui.Password[1] < 9) ? \
+                    (password_page_ui.Password[1]++) :		\
+                    (password_page_ui.Password[1] = 0);
                     memset(password_page_ui.display_buf, 0, 10);
                     sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[1]);
                     lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[1]);
                     break ;
 
                 case 2:
-                    (password_page_ui.Password[2] > 0) ? \
-                    (password_page_ui.Password[2]--) :		\
-                    (password_page_ui.Password[2] = 9);
+                    (password_page_ui.Password[2] < 9) ? \
+                    (password_page_ui.Password[2]++) :		\
+                    (password_page_ui.Password[2] = 0);
                     memset(password_page_ui.display_buf, 0, 10);
                     sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[2]);
                     lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[2]);
+                    break ;
+								
+								case 3:
+                    (password_page_ui.Password[3] < 9) ? \
+                    (password_page_ui.Password[3]++) :		\
+                    (password_page_ui.Password[3] = 0);
+                    memset(password_page_ui.display_buf, 0, 10);
+                    sprintf(password_page_ui.display_buf, "%d", password_page_ui.Password[3]);
+                    lcd_model.lcd_driver->lcd_show_ascii_str(password_ascii[3]);
                     break ;
 
                 default:
                     break;
             }
+
             break ;
 
         /*返回主菜单的配置项*/
         case LEFT_LONG:
-		case RIGHT_LONG:
+        case RIGHT_LONG:
             /*将设置密码设置到用户参数区*/
             User_Memory_Para.password[0] = password_page_ui.Password[0];
             User_Memory_Para.password[1] = password_page_ui.Password[1];
             User_Memory_Para.password[2] = password_page_ui.Password[2];
+						User_Memory_Para.password[3] = password_page_ui.Password[3];
             /*保存设备密码*/
-            //setting_device_password(User_Memory_Para.password[0], User_Memory_Para.password[1], User_Memory_Para.password[2]);
+            setting_device_password(User_Memory_Para);
             password_input_item_display(0);
             password_number_display(0);
-            DEBUG("最终设置的密码:%d%d%d\n", User_Memory_Para.password[0], User_Memory_Para.password[1], User_Memory_Para.password[2]);
+            DEBUG("最终设置的密码:%d%d%d%d\n", User_Memory_Para.password[0],\
+						User_Memory_Para.password[1], User_Memory_Para.password[2],User_Memory_Para.password[3]);
             /*进入配置页面*/
             conf_page_ui.select_item = 2 ;
-			Flow_Cursor.flow_cursor = CONF_PAGE ;
-			conf_page_ui_init(conf_page_ui.select_item);
+            Flow_Cursor.flow_cursor = CONF_PAGE ;
+            conf_page_ui_init(conf_page_ui.select_item);
             break ;
 
         default:

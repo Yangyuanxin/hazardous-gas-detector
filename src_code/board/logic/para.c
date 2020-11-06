@@ -9,13 +9,17 @@ char *System_Config_Info =
 {
     "[Setting]\n"
     "Alarm_flag=1;\n"				/*报警开关*/
-	"Value_flag=1;\n"				/*数值开关*/
+    "Value_flag=1;\n"				/*数值开关*/
     "Sensivity=1;\n"				/*灵敏度级别  0:低 1:中 2:高*/
     "Debug_flag=1;\n"				/*调试标志*/
     "Detect_Log_Serial_Number=0;\n"	/*检测数据流水号*/
     "SENSIVITY_LOW    = 1000;\n"    /*低灵敏度*/
     "SENSIVITY_MEDIUM = 300;\n"     /*中灵敏度*/
     "SENSIVITY_HIGH   = 200;\n"     /*高灵敏度*/
+    "PASSWORD0=0;\n"								/*密码第1位*/
+    "PASSWORD1=0;\n"								/*密码第2位*/
+    "PASSWORD2=0;\n"								/*密码第3位*/
+    "PASSWORD3=0;\n"								/*密码第4位*/
 };
 
 /*创建一个默认的配置文件*/
@@ -43,9 +47,10 @@ static void Load_System_Para(void)
     if(-1 == User_Memory_Para.alarm)
         User_Memory_Para.alarm = 1 ;
 
-	/*数值*/
-	User_Memory_Para.value = iniparser_getint(Config_ini, "Setting:Value_flag", -1);
-	if(-1 == User_Memory_Para.value)
+    /*数值*/
+    User_Memory_Para.value = iniparser_getint(Config_ini, "Setting:Value_flag", -1);
+
+    if(-1 == User_Memory_Para.value)
         User_Memory_Para.value = 1 ;
 
     /*灵敏度*/
@@ -61,7 +66,7 @@ static void Load_System_Para(void)
         User_Memory_Para.debug_flag = 1 ;
 
     DEBUG("报警:%d\n", User_Memory_Para.alarm);
-	DEBUG("数值:%d\n", User_Memory_Para.value);
+    DEBUG("数值:%d\n", User_Memory_Para.value);
     DEBUG("灵敏度:%d\n", User_Memory_Para.sensivity);
     DEBUG("调试标志:%d\n", User_Memory_Para.debug_flag);
 
@@ -92,6 +97,26 @@ static void Load_System_Para(void)
 
     for(int i = 0 ; i < 3 ; i++)
         DEBUG("灵敏度:%d  阈值:%d\n", i, User_Memory_Para.alarm_threshold[i]);
+
+    /*三位密码*/
+    User_Memory_Para.password[0] = iniparser_getint(Config_ini, "Setting:PASSWORD0", -1);
+    User_Memory_Para.password[1] = iniparser_getint(Config_ini, "Setting:PASSWORD1", -1);
+    User_Memory_Para.password[2] = iniparser_getint(Config_ini, "Setting:PASSWORD2", -1);
+		User_Memory_Para.password[3] = iniparser_getint(Config_ini, "Setting:PASSWORD3", -1);
+    for(int i = 0 ; i < 4 ; i++)
+    {
+        if(User_Memory_Para.password[i] == -1)
+        {
+            User_Memory_Para.password[0] = 0 ;
+            User_Memory_Para.password[1] = 0 ;
+            User_Memory_Para.password[2] = 0 ;
+						User_Memory_Para.password[3] = 0 ;
+            break ;
+        }
+    }
+
+    DEBUG("密码:%d%d%d%d\n", User_Memory_Para.password[0], User_Memory_Para.password[1], 
+		User_Memory_Para.password[2],User_Memory_Para.password[3]);
 }
 
 /*加载配置文件*/
@@ -166,6 +191,20 @@ void setting_sensivity(uint8_t status)
     User_Para_Save_Process();
 }
 
+
+/*设置设备密码*/
+void setting_device_password(Conf_Para para)
+{
+    char buf1[2] = {0}, buf2[2] = {0}, buf3[2] = {0}, buf4[2] = {0};
+    sprintf(buf1, "%d", para.password[0]);
+    sprintf(buf2, "%d", para.password[1]);
+    sprintf(buf3, "%d", para.password[2]);
+    sprintf(buf4, "%d", para.password[3]);
+    iniparser_set(Config_ini, "Setting:PASSWORD0", buf1);
+    iniparser_set(Config_ini, "Setting:PASSWORD1", buf2);
+    iniparser_set(Config_ini, "Setting:PASSWORD2", buf3);
+    iniparser_set(Config_ini, "Setting:PASSWORD3", buf4);
+}
 
 /*设置阈值*/
 void Alarm_Threhold_Setting(void)

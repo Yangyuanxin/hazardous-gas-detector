@@ -8,24 +8,29 @@
 #define INPUT_PASSWD_TEXT_FONT    24
 
 //密码第一位
-#define NUM_ONE_TEXT_X					80
+#define NUM_ONE_TEXT_X					46+14
 #define NUM_ONE_TEXT_Y          117
 #define NUM_ONE_TEXT_FONT				24
 
 //密码第二位
-#define NUM_TWO_TEXT_X				  116
+#define NUM_TWO_TEXT_X				  82+14
 #define NUM_TWO_TEXT_Y					117
 #define NUM_TWO_TEXT_FONT       24
 
 //密码第三位
-#define NUM_THREE_TEXT_X				150
+#define NUM_THREE_TEXT_X				116+14
 #define NUM_THREE_TEXT_Y				117
 #define NUM_THREE_TEXT_FONT     24
+
+//密码第四位
+#define NUM_FOUR_TEXT_X					150+14
+#define NUM_FOUR_TEXT_Y					117
+#define NUM_FOUR_TEXT_FONT     	24
 
 typedef struct
 {
     uint8_t select_item ;
-    uint8_t Password[3];
+    uint8_t Password[4];
     char 	display_buf[10];
 } Password_Page ;
 

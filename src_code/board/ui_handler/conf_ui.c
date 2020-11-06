@@ -52,6 +52,7 @@ void conf_page_ui_init(uint8_t item)
 {
     Flow_Cursor.flow_cursor = CONF_PAGE ;
     conf_page_ui.select_item = item ;
+
     for(int i = 0 ; i < 4 ; i++)
         display_menu_item(Conf_Item_Display, i);
 
@@ -68,9 +69,10 @@ void enter_conf_item(uint8_t item)
 
             for(int i = 4 ; i < 8 ; i++)
                 display_menu_item(Conf_Item_Display, i);
+
             select_conf_item(conf_page_ui.select_item, BLACK);
-			/*系统参数页面初始化*/
-			para_setting_page_init();
+            /*系统参数页面初始化*/
+            para_setting_page_init();
             break ;
 
         //时间设置
@@ -80,7 +82,7 @@ void enter_conf_item(uint8_t item)
                 display_menu_item(Conf_Item_Display, i);
 
             select_conf_item(conf_page_ui.select_item, BLACK);
-			/*时间页面初始化*/
+            /*时间页面初始化*/
             break ;
 
         //密码设置
@@ -91,7 +93,7 @@ void enter_conf_item(uint8_t item)
 
             select_conf_item(conf_page_ui.select_item, BLACK);
             /*密码页面初始化*/
-			password_page_init();
+            password_page_init();
             break ;
 
         //仪器信息

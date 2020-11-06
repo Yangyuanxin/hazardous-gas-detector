@@ -26,7 +26,7 @@ typedef struct
     int detect_log_serial_number ; /*检测记录流水号*/
     /*报警阈值参数==>与灵敏度关联*/
     int16_t alarm_threshold[3];		/*报警阈值*/
-	uint8_t password[3];			/*密码*/
+	int8_t password[4];			/*密码*/
 } Conf_Para  ;
 extern Conf_Para User_Memory_Para ;
 
@@ -46,7 +46,7 @@ void setting_sensivity(uint8_t status);
 /*记录流水号保存处理*/
 void User_Detect_Log_Save_Process(void);
 /*设置机器密码*/
-void setting_device_password(uint8_t number0, uint8_t number1, uint8_t number2);
+void setting_device_password(Conf_Para para);
 
 /*用户参数保存处理*/
 void User_Para_Save_Process(void);

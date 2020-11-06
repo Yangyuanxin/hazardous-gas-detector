@@ -72,7 +72,7 @@ void Version_Info_Page_Init(void)
 {
     Flow_Cursor.flow_cursor = VERSION_PAGE ;
     display_version_info(1);
-	printf("版本信息页面初始化：%d\n",Flow_Cursor.flow_cursor);
+    printf("版本信息页面初始化：%d\n", Flow_Cursor.flow_cursor);
 }
 
 
@@ -81,7 +81,7 @@ static void Handle_Version_Info_Page_Left_Key(void)
 {
     display_version_info(0);
     conf_page_ui.select_item = 3 ;
-	Flow_Cursor.flow_cursor = CONF_PAGE ;
+    Flow_Cursor.flow_cursor = CONF_PAGE ;
     conf_page_ui_init(conf_page_ui.select_item);
 }
 
@@ -89,21 +89,21 @@ static void Handle_Version_Info_Page_Right_Key(void)
 {
     display_version_info(0);
     conf_page_ui.select_item = 3 ;
-	Flow_Cursor.flow_cursor = CONF_PAGE ;
+    Flow_Cursor.flow_cursor = CONF_PAGE ;
     conf_page_ui_init(conf_page_ui.select_item);
 }
 
 Event_Frame Version_Info_Page_Event[] =
 {
     {Handle_Version_Info_Page_Left_Key},
-	NULL,
+    NULL,
     {Handle_Version_Info_Page_Right_Key},
-	NULL,
+    NULL,
 };
 
 /*版本信息按键操作*/
 void version_info_page_process(uint8_t KeyValue)
 {
-	if(Version_Info_Page_Event[KeyValue - 1].handler_func != NULL)
-		Version_Info_Page_Event[KeyValue - 1].handler_func();
+    if(Version_Info_Page_Event[KeyValue - 1].handler_func != NULL)
+        Version_Info_Page_Event[KeyValue - 1].handler_func();
 }
