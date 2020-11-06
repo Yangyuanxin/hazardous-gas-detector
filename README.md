@@ -27,6 +27,34 @@
 
 #### 1.2.2 核心软件框架
 
+## LCD驱动框架数据结构
+
+![image-20201106085512333](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201106085512333.png)
+
+![image-20201106085528972](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201106085528972.png)
+
+这里提供了将驱动框架与驱动进行对接的能力，`&lcd_driver`拿到的是定义在驱动文件里的一个已经赋值了的结构体`lcd_driver`，这样，当我在别的地方定义一个`LCD_Driver_Model`的变量，就可以将这个变量与驱动结构体进行对接，这样就可以通过这个变量来操作驱动结构体里的接口了。
+
+## LCD驱动数据结构
+
+![image-20201106085552807](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201106085552807.png)
+
+LCD驱动这个数据结构要做的事情就是提供操作LCD驱动能力的接口，这个接口的设计与硬件无关。
+
+![image-20201106085613399](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201106085613399.png)
+
+驱动框架依赖于驱动接口，这样的话我们需要实现驱动接口里的方法，在对应的方法里，我们要去调用LCD设备相关的接口，进而去操作LCD设备，以下是接口对应的实现：
+
+![image-20201106085822107](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201106085822107.png)
+
+## LCD设备数据结构
+
+![image-20201106085635671](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201106085635671.png)
+
+LCD设备所需要做的事情就是将这个数据结构里的功能函数与真实的LCD驱动接口进行对接。比如我们看`LCD_Init`这个接口的实现，这个就是真实调用LCD的真实硬件操作了：
+
+## 菜单框架与传感器检测框架
+
 菜单部分以及传感器部分都是基于表驱动+状态机的方式实现：
 
 ![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVHUDF4Z2ljT3M5dHFiMkJ3aWJ4TEUzSW9pYVM1Zm9HdVRNNU1RMHgzNjMwa3U1SVlJTU0wVFROY1EvNjQw?x-oss-process=image/format,png)
