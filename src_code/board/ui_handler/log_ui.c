@@ -93,19 +93,27 @@ void display_no_log(uint8_t enable)
 {
     uint8_t item = 0 ;
     LCD_Chinese_Show_Para para_ch ;
-    item = enable ;
-
-    if(enable != 0 && enable != 1)
-        return ;
-
-    para_ch.x = 		Log_Status_Item[item].x;
-    para_ch.y = 		Log_Status_Item[item].y;
-    para_ch.s =			Log_Status_Item[item].Str;
-    para_ch.fc =		Log_Status_Item[item].front_color;
-    para_ch.bc =		Log_Status_Item[item].back_color ;
-    para_ch.sizey = Log_Status_Item[item].font_num;
-    para_ch.mode =	Log_Status_Item[item].mode	;
-    lcd_model.lcd_driver->lcd_show_chinese_str(para_ch);
+		if(0 == enable)
+		{
+			para_ch.x = 		Log_Status_Item[1].x;
+			para_ch.y = 		Log_Status_Item[1].y;
+			para_ch.s =			Log_Status_Item[1].Str;
+			para_ch.fc =		Log_Status_Item[1].front_color;
+			para_ch.bc =		Log_Status_Item[1].back_color ;
+			para_ch.sizey = Log_Status_Item[1].font_num;
+			para_ch.mode =	Log_Status_Item[1].mode	;
+		}
+		else
+		{
+			para_ch.x = 		Log_Status_Item[0].x;
+			para_ch.y = 		Log_Status_Item[0].y;
+			para_ch.s =			Log_Status_Item[0].Str;
+			para_ch.fc =		Log_Status_Item[0].front_color;
+			para_ch.bc =		Log_Status_Item[0].back_color ;
+			para_ch.sizey = Log_Status_Item[0].font_num;
+			para_ch.mode =	Log_Status_Item[0].mode	;
+		}
+		lcd_model.lcd_driver->lcd_show_chinese_str(para_ch);
 }
 
 /*显示序号*/
@@ -150,8 +158,8 @@ static void display_log_detect_result(uint8_t result, uint8_t enable)
     LCD_Fill_Para	para_fill ;
     LCD_Chinese_Show_Para para_ch[] =
     {
-        {DETECT_RESULT_X + 108, DETECT_RESULT_Y, (uint8_t *)"安全", WHITE, BLACK, 24, 1},
-        {DETECT_RESULT_X + 108, DETECT_RESULT_Y, (uint8_t *)"危险", WHITE, BLACK, 24, 1},
+        {DETECT_RESULT_X + 108, DETECT_RESULT_Y, (uint8_t *)"安全", GREEN, BLACK, 24, 1},
+        {DETECT_RESULT_X + 108, DETECT_RESULT_Y, (uint8_t *)"危险", RED, BLACK, 24, 1},
         {DETECT_RESULT_X + 108, DETECT_RESULT_Y, (uint8_t *)"安全", BLACK, BLACK, 24, 0},
         {DETECT_RESULT_X + 108, DETECT_RESULT_Y, (uint8_t *)"危险", BLACK, BLACK, 24, 0},
     };
@@ -279,7 +287,6 @@ void Handler_Log_Page_Right_Key(void)
 /*长按退回主页面记录选项*/
 void Handler_Log_Page_Right_Long_Key(void)
 {
-    LCD_Ascii_Show_Para log_serial_para = {0, 5, 240, DateTime_Handler_Info.DisPlay_DateBuf, BLACK, WHITE, 24};
     log_item_display(0);
 
     /*如果是在无记录显示的页面，退出时要隐藏选项*/
@@ -295,8 +302,7 @@ void Handler_Log_Page_Right_Long_Key(void)
 
     Flow_Cursor.flow_cursor = MAIN_PAGE ;
     lcd_model.lcd_driver->lcd_display_onoff(0);
-    Get_RTC_Date_Time();
-    lcd_model.lcd_driver->lcd_show_ascii_str(log_serial_para);
+		display_tencent_logo(1);
     Select_Main_Menu_Item(main_page_ui.select_item);
     lcd_model.lcd_driver->lcd_display_onoff(1);
 }

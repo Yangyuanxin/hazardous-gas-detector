@@ -20,13 +20,18 @@
 typedef struct
 {
     int8_t alarm ;					/*报警*/
-	int8_t value  ;					/*数值开关*/
+		int8_t value  ;					/*数值开关*/
     int8_t sensivity;				/*灵敏度*/
-    int8_t debug_flag ;				/*调试标志*/
+    int8_t debug_flag ;			/*调试标志*/
+		int8_t upload_flag ;		/*数据上传标志*/
     int detect_log_serial_number ; /*检测记录流水号*/
     /*报警阈值参数==>与灵敏度关联*/
     int16_t alarm_threshold[3];		/*报警阈值*/
-	int8_t password[4];			/*密码*/
+		int8_t password[4];			/*密码*/
+		char wifi_name[32] ;		/*wifi名称*/
+    char wifi_password[32];	/*wifi密码*/
+		char server_ip[32];			/*服务器ip*/
+		int  server_port ;			/*服务端口号*/
 } Conf_Para  ;
 extern Conf_Para User_Memory_Para ;
 
@@ -41,6 +46,8 @@ void setting_debug(uint8_t status);
 void setting_alarm(uint8_t status);
 /*设置数值显示*/
 void setting_value(uint8_t status);
+/*设置网络显示*/
+void setting_network(uint8_t status);
 /*设置灵敏度*/
 void setting_sensivity(uint8_t status);
 /*记录流水号保存处理*/

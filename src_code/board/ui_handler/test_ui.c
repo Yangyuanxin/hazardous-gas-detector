@@ -229,9 +229,14 @@ void Handler_Test_Page_Right_Key(void)
     Sensor_Flow_Cursor.Detect_Step = NULL_STATUS ;
     mq2_sensor_interface.led_control(&mq2_sensor_interface, 0);
     mq2_sensor_interface.buzzer_control(&mq2_sensor_interface, 0);
-    lcd_model.lcd_driver->lcd_clear(BLACK);
+		lcd_model.lcd_driver->lcd_display_onoff(0);
+		Display_Process_Bar(0, 0);
+    display_smoke_value(0, BLACK, 0);
     Flow_Cursor.flow_cursor = MAIN_PAGE ;
-    main_page_init();
+    main_page_ui.select_item = 0;
+    Select_Main_Menu_Item(main_page_ui.select_item);
+		display_tencent_logo(1);
+		lcd_model.lcd_driver->lcd_display_onoff(1);
     tos_knl_sched_unlock();
 }
 

@@ -2,34 +2,26 @@
 #include "bsp_bmp.h"
 
 Main_Page_Ui main_page_ui ;
-LCD_Fill_Para LOGO_Fill_Para = {55, 183, 55, 183, BLACK} ;
+LCD_Fill_Para LOGO_Fill_Para = {55, 183, 45, 183, BLACK} ;
 LCD_Ascii_Show_Para datatime_display_para = {70, 5, 170, DateTime_Handler_Info.DisPlay_DateBuf, BLACK, WHITE, 24} ;
 LCD_Bmp_Show_Para main_logo_para[] =
 {
-    {55, 55, "0:/UI/main_page/detect_logo.bmp"},
-    {55, 55, "0:/UI/main_page/log_logo.bmp"},
-    {55, 55, "0:/UI/main_page/conf_logo.bmp"},
+    {55, 45, "0:/UI/main_page/detect_logo.bmp"},
+    {55, 45, "0:/UI/main_page/log_logo.bmp"},
+    {55, 45, "0:/UI/main_page/conf_logo.bmp"},
 };
+
+
 
 /*选择菜单项*/
 void Select_Main_Menu_Item(uint8_t item)
 {
-    lcd_model.lcd_driver->lcd_fill(LOGO_Fill_Para);
-
     if(0 == item)
-    {
         lcd_model.lcd_driver->Lcd_show_bmp(main_logo_para[0]);
-    }
     else if(1 == item)
-    {
-        display_smoke_value(0, BLACK, 0);
         lcd_model.lcd_driver->Lcd_show_bmp(main_logo_para[1]);
-    }
     else if(2 == item)
-    {
-        display_smoke_value(0, BLACK, 0);
         lcd_model.lcd_driver->Lcd_show_bmp(main_logo_para[2]);
-    }
 }
 
 /*获取RTC时钟并显示*/
@@ -44,17 +36,10 @@ void Get_RTC_Date_Time(void)
 /*主页面初始化*/
 void main_page_init(void)
 {
-    LCD_Rect_Show_Para rect_para ;
-    rect_para.x_start = 0 ;
-    rect_para.x_end   = 239 ;
-    rect_para.y_start = 0 ;
-    rect_para.y_end   = 239 ;
-    rect_para.color   = ((18 >> 3) << 11) | ((150 >> 2) << 5) | (219 >> 3);
     main_page_ui.select_item = 0;
     Flow_Cursor.flow_cursor = MAIN_PAGE ;
     lcd_model.lcd_driver->lcd_display_onoff(0);
     Get_RTC_Date_Time();
-    lcd_model.lcd_driver->lcd_draw_rect(rect_para);
     Select_Main_Menu_Item(main_page_ui.select_item);
     lcd_model.lcd_driver->lcd_display_onoff(1);
 }
@@ -79,21 +64,23 @@ static void Handler_Main_Page_Left_Long_Key(void)
 /*右键处理*/
 static void Handler_Main_Page_Right_Key(void)
 {
+		lcd_model.lcd_driver->lcd_fill(LOGO_Fill_Para);
     if(0 == main_page_ui.select_item)
-    {
-        lcd_model.lcd_driver->lcd_fill(LOGO_Fill_Para);
+		{
+				display_tencent_logo(0);
         test_page_init();
-    }
+		}
     else if(1 == main_page_ui.select_item)
-    {
-        lcd_model.lcd_driver->lcd_fill(LOGO_Fill_Para);
+		{
+				display_tencent_logo(0);
         log_page_init();
-    }
+		}
     else if(2 == main_page_ui.select_item)
-    {
-        lcd_model.lcd_driver->lcd_fill(LOGO_Fill_Para);
-        conf_page_ui_init(0);
-    }
+		{
+				display_tencent_logo(0);
+        //conf_page_ui_init(0);
+				password_input_page_init();
+		}
 }
 
 Event_Frame Main_Page_Event[] =

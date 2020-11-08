@@ -6,7 +6,8 @@ typedef struct
 {
     uint8_t alarm ;				/*报警*/
     uint8_t value  ;			/*数值显示开关*/
-    uint8_t sensivity;			/*灵敏度*/
+		uint8_t network ;			/*网络开关*/
+    uint8_t sensivity;		/*灵敏度*/
     int     sensivity_value[3];	/*吸气模式灵敏度数值==>对应低、中、高*/
 
     uint8_t select_item;		/*当前设置哪一项*/

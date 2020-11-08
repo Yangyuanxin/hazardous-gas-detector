@@ -41,35 +41,36 @@ int Sensor_Register(Sensor *sensor_handle)
     return 0 ;
 }
 
-
 /*待机模式*/
-void standby_mode(void)
+__IO uint8_t standby_status = 0;
+
+void sleep_mode(void)
 {
-    __IO static uint8_t status = 0;
+    Flow_Cursor.flow_cursor = SLEEP_PAGE ;
+    //开指示灯
+    HAL_GPIO_WritePin(GPIOC, LED_Pin, GPIO_PIN_SET);
+    //关屏
+    lcd_model.lcd_driver->lcd_display_onoff(0);
+    standby_status = 1 ;
+}
 
-    switch(status)
-    {
-        case 0:
-            Flow_Cursor.flow_cursor = SLEEP_PAGE ;
-            //开指示灯
-            HAL_GPIO_WritePin(GPIOC, LED_Pin, GPIO_PIN_SET);
-            //关屏
-			lcd_model.lcd_driver->lcd_display_onoff(0);
-            status = 1 ;
-            break ;
-
-        case 1:
-            Flow_Cursor.flow_cursor = MAIN_PAGE ;
-            //关指示灯
-            HAL_GPIO_WritePin(GPIOC, LED_Pin, GPIO_PIN_RESET);
-            //开屏
-			lcd_model.lcd_driver->lcd_display_onoff(1);
-            status = 0 ;
-            break ;
-
-        default:
-            break ;
-    }
+/*唤醒模式*/
+extern __IO uint8_t connect_wifi;
+extern __IO uint8_t connect_server ;
+void wake_up_mode(void)
+{
+		lcd_model.lcd_driver->lcd_clear(BLACK);
+		main_page_init();
+		display_tencent_logo(1);
+		if(connect_wifi == 1)
+			display_wlan_status(1);
+		if(connect_server == 1)
+			display_wlan_status(2);
+    //关指示灯
+    HAL_GPIO_WritePin(GPIOC, LED_Pin, GPIO_PIN_RESET);
+    //开屏
+    lcd_model.lcd_driver->lcd_display_onoff(1);
+    standby_status = 0 ;
 }
 
 void alarm_led_control(Sensor *sensor_handle, uint8_t status)

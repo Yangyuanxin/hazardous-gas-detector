@@ -27,6 +27,16 @@
 #define NUM_FOUR_TEXT_Y					117
 #define NUM_FOUR_TEXT_FONT     	24
 
+//密码错误
+#define PASSWD_ERROR_TEXT_START_X 71
+#define PASSWD_ERROR_TEXT_START_Y 157
+#define PASSWD_ERROR_TEXT_FONT    24
+
+//请重新输入
+#define RETRY_INPUT_TEXT_START_X 62
+#define RETRY_INPUT_TEXT_START_Y 182
+#define RETRY_INPUT_TEXT_FONT    24
+
 typedef struct
 {
     uint8_t select_item ;
@@ -34,12 +44,21 @@ typedef struct
     char 	display_buf[10];
 } Password_Page ;
 
+/*简单加密*/
+void sample_encrypt_passwd(int8_t passwd[4]);
+/*简单解密*/
+void sample_decode_passwd(int8_t passwd[4]);
 
 /*密码设置初始化*/
 void password_page_init(void);
+
 /*密码设置页面按键处理*/
 void password_page_process(uint8_t KeyValue);
 
+/*密码输入页面初始化*/
+void password_input_page_init(void);
+/*密码输入页面按键处理*/
+void password_input_page_process(uint8_t KeyValue);
 
 #endif //__PASSWORD_UI_H
 

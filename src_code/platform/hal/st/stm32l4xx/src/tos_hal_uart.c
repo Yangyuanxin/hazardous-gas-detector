@@ -9,7 +9,7 @@ __API__ int tos_hal_uart_recv_init(hal_uart_port_t port)
     switch((int)port)
     {
         case HAL_UART_PORT_0:
-//			HAL_UART_Receive_IT(&hlpuart1, &esp_8266_data, 1);
+						HAL_UART_Receive_IT(&hlpuart1, &esp_8266_data, 1);
             break ;
 
         case HAL_UART_PORT_1:
@@ -34,8 +34,8 @@ __API__ int tos_hal_uart_init(hal_uart_t *uart, hal_uart_port_t port)
 
     if (port == HAL_UART_PORT_0)
     {
-        //uart->private_uart = &hlpuart1;
-        //MX_LPUART1_UART_Init();
+        uart->private_uart = &hlpuart1;
+        MX_LPUART1_UART_Init();
     }
     else if (port == HAL_UART_PORT_1)
     {

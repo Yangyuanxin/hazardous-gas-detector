@@ -41,7 +41,9 @@ extern "C" {
 
 #include "tos_k.h"
 #include "tos_at.h"
+#include "esp8266.h"
 #include "cmsis_os.h"
+#include "tos_at_socket.h"
 
 #include "rtc.h"
 #include "key.h"
@@ -59,7 +61,7 @@ extern "C" {
 #include "conf_ui.h"
 #include "para_ui.h"
 #include "sleep_ui.h"
-//#include "datetime_ui.h"
+#include "datetime_ui.h"
 #include "password_ui.h"
 #include "version_info_ui.h"
 

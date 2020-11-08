@@ -40,6 +40,8 @@ typedef enum
 	PARA_PAGE,
 	VERSION_PAGE,
 	PASSWD_PAGE,
+	PASSWD_INPUT_PAGE,
+	DATETIME_PAGE,
 }OP_PAGE;
 
 /*≤Àµ•≥ı ºªØ*/

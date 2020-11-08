@@ -83,6 +83,7 @@ void enter_conf_item(uint8_t item)
 
             select_conf_item(conf_page_ui.select_item, BLACK);
             /*时间页面初始化*/
+						datetime_page_init();
             break ;
 
         //密码设置
@@ -139,6 +140,7 @@ void conf_page_process(uint8_t Event_Code)
                 display_menu_item(Conf_Item_Display, i);
 
             Flow_Cursor.flow_cursor = MAIN_PAGE ;
+						display_tencent_logo(1);
             Select_Main_Menu_Item(main_page_ui.select_item);
             lcd_model.lcd_driver->lcd_display_onoff(1);
             break ;

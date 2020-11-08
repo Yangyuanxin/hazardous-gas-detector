@@ -20,9 +20,11 @@ typedef struct Sensor
 } Sensor ;
 extern Sensor *MQ2_Sensor ;
 extern Sensor mq2_sensor_interface ;
-
+extern __IO uint8_t standby_status ;
 /*待机模式*/
-void standby_mode(void);
+void sleep_mode(void);
+/*唤醒模式*/
+void wake_up_mode(void);
 /*注册传感器*/
 int Sensor_Register(Sensor *sensor_handle);
 
