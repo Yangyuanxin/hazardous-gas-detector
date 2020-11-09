@@ -11,7 +11,13 @@
 
 [有关版本等信息的重要性(以STM32产品开发为例)](http://mp.weixin.qq.com/s?__biz=MzA3MjMzNTc4NA==&mid=2649002172&idx=1&sn=55b5b31a1218c7e75867f66cce2dd557&chksm=870fd87bb078516d2bca305d1d7c4c420497d6f29b9599d3f9fc57671bab915dbc3710642208&scene=21#wechat_redirect)
 
-这几篇文章都跟最终要达到的效果关联很大，但是功能并没有完善，今天分享的这个总算是有点像产品的样子了，但无奈硬件资源有限，无法完成太多功能，但我还是希望有朝一日，我能利用我身边的资源把它做成一个公模开源的手持式危险气体探测仪，并继续完善优化软件逻辑以及产品功能，甚至会加入一些标准化的东西(国标、行标、企标)，让它看起来真正的像一个产品，并且希望有机会能够量产，帮助更多的工程师入门。
+[TencentOS tiny危险气体探测仪产品级开发](https://mp.weixin.qq.com/s/CVEUo7VqDfvVh2G7FYPdSQ)
+
+[自己动手撸个简单的LCD驱动框架吧!](https://mp.weixin.qq.com/s/q4D1X0vSMqrUcGKHegkcCw)
+
+[TencentOS tiny危险气体探测仪产品级开发重磅高质量更新](https://mp.weixin.qq.com/s/HJ19dNuedLz8bjh-f9HZZw)
+
+但无奈硬件资源有限，无法完成太多功能，但我还是希望有朝一日，我能利用我身边的资源把它做成一个公模开源的手持式危险气体探测仪，并继续完善优化软件逻辑以及产品功能，甚至会加入一些标准化的东西(国标、行标、企标)，让它看起来真正的像一个产品，并且希望有机会能够量产，帮助更多的工程师入门。
 
 ## 1、软件组成
 
@@ -27,7 +33,9 @@
 
 #### 1.2.2 核心软件框架
 
-## LCD驱动框架数据结构
+#### 1.2.2.1 LCD软件框架
+
+#### (1)LCD驱动框架数据结构
 
 ![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSWliUWxWTDl5V1FtMnN3dVZJbUlxZGhNZTBicE5McGlhUDJRNHNUVWlhRUd1SGlibm1razlwckpBb1Q4eGI0MTVRd2hTV3BQNXppYTQyWHFRZy82NDA?x-oss-process=image/format,png)
 
@@ -35,7 +43,7 @@
 
 这里提供了将驱动框架与驱动进行对接的能力，`&lcd_driver`拿到的是定义在驱动文件里的一个已经赋值了的结构体`lcd_driver`，这样，当我在别的地方定义一个`LCD_Driver_Model`的变量，就可以将这个变量与驱动结构体进行对接，这样就可以通过这个变量来操作驱动结构体里的接口了。
 
-## LCD驱动数据结构
+#### (2)LCD驱动数据结构
 
 ![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSWliUWxWTDl5V1FtMnN3dVZJbUlxZGhNMmljQ1VsSUhyUWljMnE3Sldzbm1BTVhpYVB5dTE2VGt3V3FPdkNCMGxDUkZWYXVGZFp6VXRMSDVnLzY0MA?x-oss-process=image/format,png)
 
@@ -47,239 +55,21 @@ LCD驱动这个数据结构要做的事情就是提供操作LCD驱动能力的�
 
 ![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSWliUWxWTDl5V1FtMnN3dVZJbUlxZGhNZ3hhYXFwZVZFUG5pYTdpY2ljbW9zajZQbzBQZzNvYXEyN1hpYzV6MkJCRTZGR3pDRTdZWGRla1NpYncvNjQw?x-oss-process=image/format,png)
 
-## LCD设备数据结构
+#### (3)LCD设备数据结构
 
 ![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSWliUWxWTDl5V1FtMnN3dVZJbUlxZGhNT3NkZFk1NVZzMWthamxPam5tczdIM3BwWHVaaDVNMHIxZTd1b3hNanJpYVZkaWM2aWJQSlo1aWJtQS82NDA?x-oss-process=image/format,png)
 
-LCD设备所需要做的事情就是将这个数据结构里的功能函数与真实的LCD驱动接口进行对接。比如我们看`LCD_Init`这个接口的实现，这个就是真实调用LCD的真实硬件操作了：
+LCD设备所需要做的事情就是将这个数据结构里的功能函数与真实的LCD驱动接口进行对接。比如我们看`LCD_Init`这个接口的实现，这个就是真实调用LCD的真实硬件操作了。
 
-## 菜单框架与传感器检测框架
 
-菜单部分以及传感器部分都是基于表驱动+状态机的方式实现：
 
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVHUDF4Z2ljT3M5dHFiMkJ3aWJ4TEUzSW9pYVM1Zm9HdVRNNU1RMHgzNjMwa3U1SVlJTU0wVFROY1EvNjQw?x-oss-process=image/format,png)
 
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVUdjhpYW5yaWFQU3JRTWNZYW5VNWw3NnBibTJPSzY1Y1ZEOEJTZnZDaEkyZG1ITWJlYjVaU1lKZy82NDA?x-oss-process=image/format,png)
 
-#### 1.3.1 优化UI界面
+文档说明持续更新中。。。。。。
 
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVaR3Z1Y0w0b0JWUlFzbnBrdDVsTWcwN0ZjU0REQWVSTVhGdmU4Nm1EeUlCcGVrMFVIN0hYZEEvNjQw?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVWT0FCdjBkSENKRWRnbno1a09ra3d4RmFvQTl2VkJvdWZzcU5pY25mNlRJOFl3ZWtCYUlYVUJBLzY0MA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X2pwZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVzMTBpYjM0N1JPZjROZWt5OTVvbEpmMlBDM1g2ZXVYNDVLaWJTaWFkUVVoZE1IZXlVSmlhd3ZZVDlBLzY0MA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVPR3ZJazI3RnVLTU5jbndBejlkNTNHeFBQUHoyN0w2cUc4cmhuTExuaWM5OWlhaWNwYzJKczJjaWFBLzY0MA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVUS2p2ZVdSa0NiQVQwUmlhaWIzWkFuVlh1RU1oTGpaMG9GNzh3Q2ZNNEJ6MDRWS1hDaDZFRTJOZy82NDA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVEZUVvN2Y0UnRMN0J3WFhiWEJzT2MyN3A5UWhUc2o1NERkZGliMTlRMlJycWxab3I0bEQwZEV3LzY0MA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmV0ZmRtRDgyNWJIVnhiNFo4VTZhaWNNM2NoNzZqZG9uVHZrZmg2TGZVYmR1eWljemd3Qk1NRFR6Zy82NDA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVmZ3dMQk9BekVHaWFLRWJyck1pY3VxU01uaWE2cXZ0STRRQUFIRjNHU0M1UHl4aWJyVmp4blc1c2tRLzY0MA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVneWhJZ1ZWaHQ5WHo2RWFOcktDSTQ1Y1RyYWR1R1paTU1tVW9XR1RJcVJpYnZSV0RXQ0U5U2JBLzY0MA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmUweHRibnhnQlRpY2ljcm1zWkxINldVR0hRc0JCUGc0TUd6Nko2NVRqMExRYTBWWkRTTXFYNFphUS82NDA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVpYUVnOFpKdTMzc2ZJTkRJWnhVS1BpYjY4SGVJcmlhUlhkMmE4SmJtcmYzOUNiMjJwRTZZekU5YVEvNjQw?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X2pwZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmV0eUZhZ0xWbUsxTUVMcjloZVBoamljR3lIYTBnY2NNbzNWVlE3VUtpYnZrZ05maHpEbjFTSGJDdy82NDA?x-oss-process=image/format,png)    ![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmUxa0tyTlJBRGMxMnNyaWFnaWM2RXNGbFZQUDd4STJscGVMUFNzTjV2QVM4eVNMakZaUGtvQndSQS82NDA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmV0WU92ZFBWWWcwaWNiNnNnWDB1cHc3ZnpHU2NpYjVDUERqbkRxbGlibGliQkVRRFRpYUxiNzhZVUZpYkEvNjQw?x-oss-process=image/format,png)
 
-#### 1.3.2 TencentOS tiny加持 
 
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmV5bm9pYVFOVHgxaWFVaWI4eGFzbUtsdFJjVUU0SWNnb2FZOWhtT1FpY2xRWXg1ZW41UDZJajg1ZTZBLzY0MA?x-oss-process=image/format,png)
 
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVmVnhXZUVZZmZaTExpY0VTNUR0U3ZaRGJFNmpDaWM1ODdpYjRjRjRDaWFlOGZaNEhOd1FDSzJaQzF3LzY0MA?x-oss-process=image/format,png)
-
-由于有TecentOS tiny RTOS的加持，使得我们编程的行为习惯不能像裸机那么随便了，所以，在多个任务并行的过程中，在一些临界区资源的地方必须要加上调度锁，以防止线程切换的过程中产生一些乱象，比如LCD显示接口，但凡是需要显示的地方，都要做好保护，如果没有做好保护，那你可能会看到类似如下的现象：
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmV3dGhpYnNuT2VnaldlSTZrbFo3c0s4T25qTlVoTUxQakI5ODJNdnhucXQ5VVVxaWJ4NVNtTkJ5dy82NDA?x-oss-process=image/format,png)
-
-明明我的软件代码编写的逻辑就没有在这个地方做显示，为啥突然有个莫名其妙的色块产生？？这就是因为任务发生切换导致显示的错乱现象；简单的可能是这样的现象，严重的话产品直接就死机了。那么如何加调度锁呢？
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVQNTlsNGJTWHNmcDY3UjBzY2cwU2ljOGs5a0M1bEdPVHp3b1BpY2c5WDg1WjZLUGpCY3gzUjdSQS82NDA?x-oss-process=image/format,png)
-
-例如，给显示一个ASCII码字符串的地方加上调度锁：
-
-```c
-/**
- * @brief  显示一个ASCII码字符串
- * @param   x,y  显示起始坐标
- * @param   str  需要显示的字符串
- * @param   size 字体大小(支持16/24/32号字体)
- * @return  none
- * @note  1. 需要font.h字库文件的支持
- *      2. 超过指定width不显示超过的字符
- */
-void LCD_ShowCharStr(uint16_t x, uint16_t y, uint8_t max_width, char* str, uint16_t back_color, uint16_t font_color, uint8_t font_size)
-{
-  //锁定系统调度
- tos_knl_sched_lock();
- max_width += x;
- 
- while((*str <= '~') && (*str >= ' ')) //判断是否非法字符
- {
-   if(x >= max_width)
-   {
-     //x方向越界，结束
-     break;
-   }
-   
-   LCD_ShowChar(x,y,*str,back_color, font_color,font_size);
-   x += font_size / 2;
-   str++;
- }
-  //解锁系统调度
- tos_knl_sched_unlock();
-}
-```
-
-加调度锁的方法，即是在函数入口处加上`tos_knl_sched_lock`，在函数出口的地方`tos_knl_sched_unlock`解除调度锁，这样就完成了一个显示过程的保护，当然，在对SD卡文件系统读写参数的过程中，我们也需要做好保护，比如：
-
-```c
-/*用户参数保存处理*/
-void User_Para_Save_Process(void)
-{
-    //锁定系统调度
-    tos_knl_sched_lock();
-    /*write config.ini parse*/
-    retUSER_SYS_CONFIG = f_open(&USER_SYS_CONFIG_File, SETTING_PARA, FA_OPEN_EXISTING | FA_WRITE);
- 
-    if(FR_OK != retUSER_SYS_CONFIG)
-    {
-        printf("iniparser: cannot open %s\n", SETTING_PARA);
-        return ;
-    }
- 
-    printf("参数设置保存成功\n");
-    iniparser_dump_ini(Config_ini, &USER_SYS_CONFIG_File);
-    f_close(&USER_SYS_CONFIG_File);
-    iniparser_freedict(Config_ini);
-    Load_Config_ini_File();
-    //解锁系统调度
-    tos_knl_sched_unlock();
-}
-/*用户参数保存处理*/
-void User_Para_Save_Process(void)
-{
-    //锁定系统调度
-    tos_knl_sched_lock();
-    /*write config.ini parse*/
-    retUSER_SYS_CONFIG = f_open(&USER_SYS_CONFIG_File, SETTING_PARA, FA_OPEN_EXISTING | FA_WRITE);
- 
-    if(FR_OK != retUSER_SYS_CONFIG)
-    {
-        printf("iniparser: cannot open %s\n", SETTING_PARA);
-        return ;
-    }
- 
-    printf("参数设置保存成功\n");
-    iniparser_dump_ini(Config_ini, &USER_SYS_CONFIG_File);
-    f_close(&USER_SYS_CONFIG_File);
-    iniparser_freedict(Config_ini);
-    Load_Config_ini_File();
-    //解锁系统调度
-    tos_knl_sched_unlock();
-}
-```
-
-如果没有做好保护，当你在写入参数到文件系统的时候，此时任务发送了切换，那么很容易就会导致写入错乱进而跳转到：
-
-```c
-/**
-  * @brief This function handles Hard fault interrupt.
-  */
-void HardFault_Handler(void)
-{
-    /* USER CODE BEGIN HardFault_IRQn 0 */
- 
-    /* USER CODE END HardFault_IRQn 0 */
-    while (1)
-    {
-        /* USER CODE BEGIN W1_HardFault_IRQn 0 */
-        /* USER CODE END W1_HardFault_IRQn 0 */
-    }
-}
-```
-
-系统有时候就莫名其妙的卡死了；以上这些都是我个人对于RTOS的学习和使用经验，如有说得不合理的地方，欢迎大佬指点迷津。
-
-#### 1.3.3 记录及记录逻辑
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVWT0FCdjBkSENKRWRnbno1a09ra3d4RmFvQTl2VkJvdWZzcU5pY25mNlRJOFl3ZWtCYUlYVUJBLzY0MA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X2pwZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmV0eUZhZ0xWbUsxTUVMcjloZVBoamljR3lIYTBnY2NNbzNWVlE3VUtpYnZrZ05maHpEbjFTSGJDdy82NDA?x-oss-process=image/format,png)![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmV0WU92ZFBWWWcwaWNiNnNnWDB1cHc3ZnpHU2NpYjVDUERqbkRxbGlibGliQkVRRFRpYUxiNzhZVUZpYkEvNjQw?x-oss-process=image/format,png)
-
-记录存储相关数据结构如下：
-
-```c
-/*文件名大小限制*/
-#define FILE_NAME_LEN 20
-/*检测数据大小限制*/
-#define DETECT_DATA_LEN 50
-/*一个文件存储检测记录的条数*/
-#define DETECT_DATA_INDEX 100
- 
-typedef struct 
-{
-    int serial_number ;      //序号
-    int year ;               //2019-
-    uint8_t month ;          //0-12
-    uint8_t day ;            //0-31
-    uint8_t hour ;           //0-24
-    uint8_t minute ;         //0-59
-    uint8_t detect_result ;  //检测结果
-    /*当前位于文件的哪一行*/
-    int Current_Line;
-    /*当前文件编号查询索引*/
-    int file_number_index ;
-    /*当前流水号，每次记录初始化的时候会赋值一次*/
-    int Current_Serial_Number ;
-} Record_Data;
-extern Record_Data csv_file_record ;
-```
-
-记录逻辑采用分文件csv存储，将csv文件序号存放在ini文件中，然后通过文件序号快速定位到具体是哪个csv文件的哪一行，该策略支持10000条数据实时查询并能保证流程不卡顿，已在相关产品中量产应用。
-
-#### 1.3.4 完成阈值设置逻辑
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVUS2p2ZVdSa0NiQVQwUmlhaWIzWkFuVlh1RU1oTGpaMG9GNzh3Q2ZNNEJ6MDRWS1hDaDZFRTJOZy82NDA?x-oss-process=image/format,png)
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVGdkhqUGxqMVV2dXQxYTNwSGpMQU9zN0c0YWEwZTNCT3NPcjRRU0NpYjhpYTBweHhUZEtDaWF0SmcvNjQw?x-oss-process=image/format,png)
-
-该设置逻辑分为三档，分别是低、中、高灵敏度，分别对应1000、300、200三档阈值设定，该灵敏度对应的阈值与检测逻辑相关联，对应逻辑关系如下：
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVnUGljS2JFV2J6V1NyNmpkbnBnN3paSzRaTG9va0dQbkU1bzF4dG1pY2ljQW9oTnRXVk13V3FBaWF3LzY0MA?x-oss-process=image/format,png)
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVwN0N1YWFMVDVQcHkzTnhSVW9VekQ0bWNGRm9WbkE0NjlQQTFCbDRjenlzZFQ3TkQ1aG1sUEEvNjQw?x-oss-process=image/format,png)
-
-阈值设置是系统配置参数的其中一项，数据结构如下：
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmUxQTZsUmtHZzZiTzlzZVJYc1R0NHZjOUpHaDR2dE9yM1cwdTdrWkdUYjNpYVBOU2dKd05sVUtRLzY0MA?x-oss-process=image/format,png)
-
-当SD卡中如果没有配置文件，它有一个默认的结果，用于表示它开机的状态，这个状态是存储在INI文件里的：
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVpYXh0NkJORVJCd3A0WjJORGRpYWFpYTNmN1JyWWNkYXRkTlZUeGNmVTlleGFwMTZqZm0xMW1mdUEvNjQw?x-oss-process=image/format,png)
-
-#### 1.3.5 完成报警设置逻辑
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVEZUVvN2Y0UnRMN0J3WFhiWEJzT2MyN3A5UWhUc2o1NERkZGliMTlRMlJycWxab3I0bEQwZEV3LzY0MA?x-oss-process=image/format,png)
-
-它是系统配置参数的其中一项，数据结构如下：
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmV4MmhPN0Zkc01QRTZYRzduVm5YZWxUSzBjWVlRQnlFbWRpYURiNmVRZDlGOHBMaHNpYXJKZmdzdy82NDA?x-oss-process=image/format,png)
-
-当SD卡中如果没有配置文件，它有一个默认的结果，用于表示它开机的状态，这个状态是存储在INI文件里的：
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmV6d2J6MUZ0YTFIZXJMbU44aWF3MTVuYlRrRE1LQTdUYXgwc3B5a2dVV2RQcUVEaWJpY0FyckxGT2cvNjQw?x-oss-process=image/format,png)
-
-该设置逻辑分为开关，当打开报警，则检测逻辑跳转到危险时，蜂鸣器会发出响声，否则不会发出响声，它的过程是通过一个标志volume进行控制的。
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVkQ2lheEZ6ZnlyUWp5QXpoV2trbFJvNEpGM0dlYkgzeVU2TlJyaWFMN1VPU3oxcnozQThPOGlicEEvNjQw?x-oss-process=image/format,png)
-
-#### 1.3.6 完成调试模式逻辑
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmV0ZmRtRDgyNWJIVnhiNFo4VTZhaWNNM2NoNzZqZG9uVHZrZmg2TGZVYmR1eWljemd3Qk1NRFR6Zy82NDA?x-oss-process=image/format,png)
-
-它是系统配置参数的其中一项，数据结构如下：
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVzMjBmeVhXWm9pY25EN2ljb045NUFpYWQ3dFJZTmsxTjBkZ3NmcUw1Zm1wNFJGQlJ1WWN0cDlBRncvNjQw?x-oss-process=image/format,png)
-
-当SD卡中如果没有配置文件，它有一个默认的结果，用于表示它开机的状态，这个状态是存储在INI文件里的：
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVyTjVPQ3J4N01GRGEwQkxyMjQ5eGFmbzlUblNOWjdxRWFQaWNRd0h3ajJOOHhDbnZxNVRoTkZnLzY0MA?x-oss-process=image/format,png)
-
-该设置逻辑分为开关，当打开调试，则检测逻辑中显示烟感值，否则不会显示烟感值，它的过程是通过一个标志debug_flag进行控制的。
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVQelZRcU83R3NPWW9ER3ozRkRKSmhZTmE4Y2VGY3V3VlVSRmliQmRJUWpxTm9aeVU2WTBlYWJnLzY0MA?x-oss-process=image/format,png)
-
-#### 1.3.7 完成仪器信息查看
-
-**![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVmZ3dMQk9BekVHaWFLRWJyck1pY3VxU01uaWE2cXZ0STRRQUFIRjNHU0M1UHl4aWJyVmp4blc1c2tRLzY0MA?x-oss-process=image/format,png)**
-
-这个功能在上一篇文章其实已经提及了，这里就不再重复说了，详细请看上一篇推文：
-
-[有关版本等信息的重要性(以STM32产品开发为例)](http://mp.weixin.qq.com/s?__biz=MzA3MjMzNTc4NA%3D%3D&chksm=870fd87bb078516d2bca305d1d7c4c420497d6f29b9599d3f9fc57671bab915dbc3710642208&idx=1&mid=2649002172&scene=21&sn=55b5b31a1218c7e75867f66cce2dd557#wechat_redirect)
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X3BuZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVFSkRXblVuRGN1NFYzeXR1anZmemM2aExqQTd2bkh5T1dzek05MVltQ2dHSkozTnBwdnJ1SHcvNjQw?x-oss-process=image/format,png)
 
 ## 2、其它
 
