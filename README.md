@@ -23,7 +23,7 @@
 
 #### 1.2.1 整体框架图
 
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X2pwZy9TWWljZUpLNzhDSThMRHhEZFZKWDBPWnN6NElvMFg2NmVwUGVXT3MxZUxpY3NrTVpLV1NpYXFWMHBNaWFhcFRGZnNFOUFkQTZWekJubHNFZHVXTWRabHY3UlEvNjQw?x-oss-process=image/format,png)
+![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9tbWJpei5xcGljLmNuL21tYml6X2pwZy9TWWljZUpLNzhDSThicXZmaDA0dzRFNWx3S1pITzgwQVRPY2ZxZEFQN28wRm9KU2pEMnYxQVBvSWljUXliV01WdUZwV2RHb0JJM2J2dkhOME1uZWJOTGpBLzY0MA?x-oss-process=image/format,png)
 
 #### 1.2.2 核心软件框架
 

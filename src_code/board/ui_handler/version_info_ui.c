@@ -3,7 +3,7 @@
 /*ID地址*/
 #define ID_ADDR 		*(__IO uint32_t *)0x1FFF7590
 /*FLASH地址*/
-#define FLASH_ADDR		*(__IO uint32_t *)0x1FFF75E0
+#define FLASH_ADDR		*(__IO uint16_t *)0x1FFF75E0
 /*MCU封装类型地址*/
 #define MCU_TYPE_ADDR	*(__IO uint32_t *)0x1FFF7500
 
